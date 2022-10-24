@@ -1,16 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import React from "react";
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Image, KeyboardAvoidingView, Platform, StyleSheet,
+  Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { login } from '../reducers/user';
 
 export default function SignUpScreen({navigation}) {
@@ -48,7 +40,7 @@ const dispatch = useDispatch();
       behavior={Platform.OS === "ios" ? "padding" : "height"}>
 
       <Image style={styles.imageLogo} source={require("../images/logo.jpg")} />
-      <Text>Welcome !</Text>
+      <Text style={styles.title}>Welcome !</Text>
 
       <TextInput
         placeholder="name"
@@ -74,15 +66,12 @@ const dispatch = useDispatch();
         <Text style={styles.textButton}>Submit</Text>
       </TouchableOpacity>
 
-      <Text>Already an account ?</Text>
+      <Text style={styles.title2}>Already an account ?</Text>
       <Text>click here :</Text>
 
-      <TouchableOpacity onPress={() => handleSubmit()} style={styles.button} activeOpacity={0.8}>
-        <Text style={styles.textButton}>go to sign in</Text>
+      <TouchableOpacity onPress={() => handleSubmit()}>
+      <Image source={require('../images/patte.jpg')} style={styles.imagePatte}/>
       </TouchableOpacity>
-
-{/* 
-      <Image style={styles.imagePatte} source={require("../images/patte.jpg")} /> */}
 
     </KeyboardAvoidingView>
   );
@@ -93,14 +82,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: "white",
+  },
+  title: {
+    fontSize: 40,
+    color: '#F1890F',
+    marginTop: 40,
+    fontWeight: '800',
+  },
+  title2: {
+    marginBottom: 10,
+    fontSize: 20,
   },
   imageLogo: {
-    width: "30%",
-    height: "30%",
+    width: 300,
+    height: 190,
   },
   imagePatte: {
-    width: "10%",
-    height: "10%",
+    marginTop: 15,
+    width: 50,
+    height: 50,
   },
   input: {
   width: '80%',
@@ -111,17 +112,17 @@ const styles = StyleSheet.create({
 },
 button: {
     alignItems: 'center',
-    paddingTop: 8,
+    paddingTop: 12,
+    paddingBottom: 12,
     width: '50%',
-    marginTop: 30,
+    marginTop: 40,
     backgroundColor: '#F1890F',
     borderRadius: 10,
-    marginBottom: 80,
+    marginBottom: 40,
   },
   textButton: {
     color: '#ffffff',
-    height: 30,
-    fontWeight: '600',
+    fontWeight: '700',
     fontSize: 16,
   },
 });
