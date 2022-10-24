@@ -3,16 +3,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+    Image, KeyboardAvoidingView, Platform,
+    StyleSheet, Text, View, ImageBackground,
+    TextInput, TouchableOpacity} from "react-native";
+
 
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -81,7 +75,7 @@ const styles = StyleSheet.create({
   imageLogo: {
     width: 300,
     height: 300,
-    borderRadius: "30%",
+    borderRadius: 10,
   },
 
   input: {
@@ -90,20 +84,5 @@ const styles = StyleSheet.create({
     borderBottomColor: "#F1890F",
     borderBottomWidth: 1,
     fontSize: 18,
-  },
-
-  imagestyleLogoGo: {
-    height: 150,
-    width: 150,
-  },
-
-  titleLogoGO: {
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#F1890F",
-    fontSize: 20,
-    fontWeight: "600",
-    marginLeft: 65,
-    marginTop: 120,
-  },
+  }
 });
