@@ -1,3 +1,4 @@
+import {useState} from'react';
 import React from "react";
 import {
     Image, KeyboardAvoidingView, Platform,
@@ -19,3 +20,19 @@ export default function SignUpScreen() {
     </KeyboardAvoidingView>
   );
 }
+
+
+
+const styles = StyleSheet.create({
+
+  container:{
+flex:1,
+backgroundColor: "red",
+  },
+
+
+  imageLogo:{
+
+  },
+
+})
