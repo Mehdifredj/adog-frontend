@@ -33,10 +33,11 @@ export default function SignInScreen({ navigation }) {
   };
 
   return (
-
-     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <Image style={styles.imageLogo} source={require('../images/logo.jpg')} />
-      <Text style={styles.title}>SignInScreen</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <Image style={styles.imageLogo} source={require("../images/logo.jpg")} />
 
       <TextInput
         placeholder="email"
@@ -51,9 +52,13 @@ export default function SignInScreen({ navigation }) {
         value={password}
         style={styles.input}
       />
-       
+
       <TouchableOpacity onPress={() => handleConnection()}>
-       <Image style={styles.imagestyle} source={require('../images/Logo-GO.jpg')}/>
+        <Text style={styles.titleLogoGO}>Go!</Text>
+        <Image
+          style={styles.imagestyleLogoGo}
+          source={require("../images/Logo-GO.jpg")}
+        />
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
@@ -62,9 +67,9 @@ export default function SignInScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor:'white',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
   },
 
   imageLogo: {
@@ -79,5 +84,21 @@ const styles = StyleSheet.create({
     borderBottomColor: "#F1890F",
     borderBottomWidth: 1,
     fontSize: 18,
-  }
+  },
+
+
+  imagestyleLogoGo: {
+    height: 150,
+    width: 150,
+  },
+
+  titleLogoGO: {
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#F1890F",
+    fontSize: 20,
+    fontWeight: "600",
+    marginLeft: 65,
+    marginTop: 120,
+  },
 });
