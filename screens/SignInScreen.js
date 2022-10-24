@@ -37,7 +37,7 @@ export default function SignInScreen({navigation}) {
   return (
 
      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <Image style={styles.image} source={require('../images/logo.jpg')} />
+      <Image style={styles.imageLogo} source={require('../images/logo.jpg')} />
       <Text style={styles.title}>SignInScreen</Text>
 
       <TextInput
@@ -66,12 +66,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor:'white',
   },
 
   imageLogo: {
     width: "30%",
     height: "30%",
-    borderRadius:"30%",
+    borderRadius:10,
   },
   
   input: {
@@ -80,17 +81,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#F1890F',
     borderBottomWidth: 1,
     fontSize: 18,
+  },
 
-  },
-  button: {
-    alignItems: 'center',
-    paddingTop: 8,
-    width: '50%',
-    marginTop: 30,
-    backgroundColor: '#F1890F',
-    borderRadius: 10,
-    marginBottom: 80,
-  },
   textButton: {
     color: '#ffffff',
     height: 30,
