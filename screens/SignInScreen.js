@@ -19,7 +19,7 @@ export default function SignInScreen({navigation}) {
 
   const handleConnection = () => {
 
-		fetch('http://192.168.10.203:3000/users/signin', { // requete fetch avec notre adresse IP personnelle sur la route POST signin
+		fetch('http://192.168.10.144:3000/users/signin', { // requete fetch avec notre adresse IP personnelle sur la route POST signin
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email, password: password }),
