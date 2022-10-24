@@ -3,15 +3,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+    Image, KeyboardAvoidingView, Platform,
+    StyleSheet, Text, View, ImageBackground,
+    TextInput, TouchableOpacity} from "react-native";
+
 
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -38,11 +33,9 @@ export default function SignInScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <Image style={styles.image} source={require("../images/logo.jpg")} />
+
+     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <Image style={styles.imageLogo} source={require('../images/logo.jpg')} />
       <Text style={styles.title}>SignInScreen</Text>
 
       <TextInput
@@ -58,13 +51,9 @@ export default function SignInScreen({ navigation }) {
         value={password}
         style={styles.input}
       />
-
-      <TouchableOpacity
-        onPress={() => handleConnection()}
-        style={styles.button}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.textButton}>Go!</Text>
+       
+      <TouchableOpacity onPress={() => handleConnection()}>
+       <Image style={styles.imagestyle} source={require('../images/Logo-GO.jpg')}/>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
@@ -73,13 +62,14 @@ export default function SignInScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor:'white',
   },
 
   imageLogo: {
-    width: "30%",
-    height: "30%",
+    width: 300,
+    height: 300,
     borderRadius: 10,
   },
 
@@ -89,20 +79,5 @@ const styles = StyleSheet.create({
     borderBottomColor: "#F1890F",
     borderBottomWidth: 1,
     fontSize: 18,
-  },
-  button: {
-    alignItems: "center",
-    paddingTop: 8,
-    width: "50%",
-    marginTop: 30,
-    backgroundColor: "#F1890F",
-    borderRadius: 10,
-    marginBottom: 80,
-  },
-  textButton: {
-    color: "#ffffff",
-    height: 30,
-    fontWeight: "600",
-    fontSize: 16,
-  },
+  }
 });
