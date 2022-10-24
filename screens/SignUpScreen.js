@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
 import React from "react";
 import {
   Image,
@@ -10,8 +11,11 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { login } from '../reducers/user';
 
 export default function SignUpScreen({navigation}) {
+
+const dispatch = useDispatch();
     
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +23,23 @@ export default function SignUpScreen({navigation}) {
 
   const handleSubmit = () => {
     navigation.navigate('SignIn');
+  };
+
+  const handleRegister = () => {
+    fetch('http://192.168.10.162:3000/users/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, email: email, password: password }),
+    }).then(response => response.json())
+      .then(data => {
+        if (data.result) {
+          dispatch(login({ email: email }));
+          setName('');
+          setEmail('');
+          setPassword('');
+          navigation.navigate('UserProfil');
+        }
+      });
   };
 
   return (
@@ -47,7 +68,7 @@ export default function SignUpScreen({navigation}) {
         style={styles.input}/>
 
       <TouchableOpacity
-        onPress={() => handleSubmit()}
+        onPress={() => handleRegister()}
         style={styles.button}
         activeOpacity={0.8} >
         <Text style={styles.textButton}>Submit</Text>
