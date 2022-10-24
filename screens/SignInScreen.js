@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
 import {
     Image, KeyboardAvoidingView, Platform,
-    StyleSheet, Text, View,
+    StyleSheet, Text, View, ImageBackground,
     TextInput, TouchableOpacity} from "react-native";
 
 
@@ -53,8 +53,8 @@ export default function SignInScreen({navigation}) {
         style={styles.input}
       />
        
-      <TouchableOpacity onPress={() => handleConnection()} style={styles.button} activeOpacity={0.8}>
-        <Text style={styles.textButton}>Go!</Text>
+      <TouchableOpacity onPress={() => handleConnection()}>
+       <Image style={styles.imagestyle} source={require('../images/Logo-GO.jpg')}/>
       </TouchableOpacity>
      </KeyboardAvoidingView>
   )
@@ -70,9 +70,15 @@ const styles = StyleSheet.create({
   },
 
   imageLogo: {
+<<<<<<< HEAD
     width: "30%",
     height: "30%",
     borderRadius:10,
+=======
+    width: 300,
+    height: 300,
+    borderRadius:"30%",
+>>>>>>> 09c8d2d7f1952f7d59f343f2494e7913648cd16a
   },
   
   input: {
@@ -88,5 +94,10 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: '600',
     fontSize: 16,
+  },
+  imagestyle:{
+
+height: 150,
+width: 150,
   },
 });
