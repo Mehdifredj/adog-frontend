@@ -7,7 +7,8 @@ export default function HomeScreen() {
   return (
     <View>
       <Text>HomeScreen</Text>
-      <Text>Kikoo</Text>
+      <Text>Bonjour la team</Text>
+      <Text>Je veux modifier</Text>
     </View>
   )
 }
