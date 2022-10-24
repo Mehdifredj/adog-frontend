@@ -26,7 +26,7 @@ const dispatch = useDispatch();
   };
 
   const handleRegister = () => {
-    fetch('http://192.168.10.162:3000/users/signup', {
+    fetch('http://192.168.10.203:3000/users/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name, email: email, password: password }),
@@ -37,7 +37,7 @@ const dispatch = useDispatch();
           setName('');
           setEmail('');
           setPassword('');
-          navigation.navigate('UserProfil');
+          navigation.navigate('UserProfile');
         }
       });
   };
