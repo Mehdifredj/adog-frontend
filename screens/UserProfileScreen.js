@@ -12,15 +12,54 @@ import {
   TouchableWithoutFeedback,
   Switch,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProfil } from "../reducers/user";
 
-export default function UserProfilScreen() {
-  const [name, setName] = useState("");
+export default function UserProfilScreen({ navigation }) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+  console.log(user);
+  const [name, setName] = useState(user.name);
   const [breed, setBreed] = useState("");
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState(0);
   const [gender, setGender] = useState("");
   const [vaccins, setVaccins] = useState(false);
   const [aboutMe, setAboutMe] = useState("");
   const [aboutMyOwner, setAboutMyOwner] = useState("");
+
+  const handleRegister = () => {
+    fetch(`http://192.168.43.169:3000/users/update/${user.token}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        breed: breed,
+        age: age,
+        gender: gender,
+        vaccins: vaccins,
+        aboutMe: aboutMe,
+        aboutMyOwner: aboutMyOwner,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.result) {
+          dispatch(
+            updateProfil({
+              name: data.name,
+              breed: data.breed,
+              age: data.age,
+              gender: data.gender,
+              vaccins: data.vaccins,
+              aboutMe: data.aboutMe,
+              aboutMyOwner: data.aboutMyOwner,
+            })
+          );
+          navigation.navigate("Filters");
+        }
+      });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -28,7 +67,7 @@ export default function UserProfilScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <Image
-        style={styles.imageLogo}
+        style={styles.imageUser}
         source={require("../images/user_default.png")}
       />
       <Text style={styles.title}>Hi ! I'm ...</Text>
@@ -57,25 +96,44 @@ export default function UserProfilScreen() {
         value={gender}
         style={styles.input}
       />
-      <Text style={styles.textButton}>Up-to-date vaccinations</Text>
-      <Switch
-        value={vaccins}
-        onValueChange={(value) => setVaccins(value)}
-        trackColor={{ false: "#808080", true: "#F1890F" }}
-        ios_backgroundColor="#808080"
-      />
-      <TextInput
-        placeholder="about me"
-        onChangeText={(value) => setAboutMe(value)}
-        value={aboutMe}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="about my owner"
-        onChangeText={(value) => setAboutMyOwner(value)}
-        value={aboutMyOwner}
-        style={styles.input}
-      />
+      <View style={styles.containerToggle}>
+        <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
+        <Switch
+          style={styles.toggle}
+          value={vaccins}
+          onValueChange={(value) => setVaccins(value)}
+          trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
+          ios_backgroundColor="#dcdcdc"
+        />
+        
+      </View>
+
+      <View style={styles.containerAbout}>
+        <Text style={styles.titleAbout}>About me :</Text>
+        <TextInput
+          placeholder="Please write something here"
+          onChangeText={(value) => setAboutMe(value)}
+          value={aboutMe}
+          style={styles.about}
+          multiline={true}
+        />
+
+        <Text style={styles.titleAbout}>About my owner :</Text>
+        <TextInput
+          placeholder="Please write something here"
+          onChangeText={(value) => setAboutMyOwner(value)}
+          value={aboutMyOwner}
+          style={styles.about}
+          multiline={true}
+        />
+      </View>
+      <TouchableOpacity
+        style={styles.buttonSubmit}
+        activeOpacity={0.8}
+        onPress={() => handleRegister()}
+      >
+        <Text style={styles.textButton}>Submit</Text>
+      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
@@ -93,5 +151,63 @@ const styles = StyleSheet.create({
     borderBottomColor: "#F1890F",
     borderBottomWidth: 1,
     fontSize: 18,
+  },
+  title: {
+    fontSize: 40,
+    color: "#F1890F",
+    marginTop: 20,
+    fontWeight: "800",
+  },
+  imageUser: {
+    width: 200,
+    height: 130,
+    borderRadius: 100,
+  },
+  containerToggle: {
+    paddingLeft: 90,
+    paddingRight: 90,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignContent: "center",
+  },
+  toggle: {
+    marginTop: 20,
+  },
+  textToggle: {
+    width: "80%",
+    marginTop: 25,
+    color: "#F1890F",
+    fontSize: 16,
+  },
+  containerAbout: {
+    width: "80%",
+  },
+  about: {
+    marginTop: 10,
+    borderColor: "#F1890F",
+    borderWidth: 1,
+    borderRadius: 15,
+    fontSize: 14,
+    padding: 10,
+  },
+  titleAbout: {
+    marginTop: 25,
+    color: "#F1890F",
+    fontSize: 16,
+  },
+  buttonSubmit: {
+    alignItems: "center",
+    paddingTop: 12,
+    paddingBottom: 12,
+    width: "50%",
+    marginTop: 40,
+    backgroundColor: "#F1890F",
+    borderRadius: 10,
+    marginBottom: 40,
+  },
+  textButton: {
+    color: "#ffffff",
+    fontWeight: "700",
+    fontSize: 16,
   },
 });

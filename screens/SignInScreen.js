@@ -3,10 +3,16 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import {
-    Image, KeyboardAvoidingView, Platform,
-    StyleSheet, Text, View, ImageBackground,
-    TextInput, TouchableOpacity} from "react-native";
-
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -15,7 +21,7 @@ export default function SignInScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleConnection = () => {
-    fetch("http://192.168.10.166:3000/users/signin", {
+    fetch("http://192.168.43.169:3000/users/signin", {
       // requete fetch avec notre adresse IP personnelle sur la route POST signin
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -24,10 +30,10 @@ export default function SignInScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ email: email })); // dispatch pour stocker les données dans le reducer
+          dispatch(login({ email: data.email, token: data.token, name: data.name })); // dispatch pour stocker les données dans le reducer
           setEmail("");
           setPassword("");
-          navigation.navigate("UserProfile"); // permet la redirection vers la page userProfile.
+          navigation.navigate("Filters"); // permet la redirection vers la page userProfile.
         }
       });
   };
@@ -87,7 +93,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 18,
   },
-
 
   imagestyleLogoGo: {
     height: 150,
