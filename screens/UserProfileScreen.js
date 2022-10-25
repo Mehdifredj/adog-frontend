@@ -105,6 +105,7 @@ export default function UserProfilScreen({navigation}) {
           trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
           ios_backgroundColor="#dcdcdc"
         />
+        
       </View>
 
       <View style={styles.containerAbout}>
