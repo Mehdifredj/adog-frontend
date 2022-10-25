@@ -15,7 +15,7 @@ export default function SignInScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleConnection = () => {
-    fetch("http://192.168.10.144:3000/users/signin", {
+    fetch("http://192.168.10.172:3000/users/signin", {
       // requete fetch avec notre adresse IP personnelle sur la route POST signin
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -44,11 +44,13 @@ export default function SignInScreen({ navigation }) {
         onChangeText={(value) => setEmail(value)}
         value={email}
         style={styles.input}
+        
       />
 
       <TextInput
         placeholder="password"
         onChangeText={(value) => setPassword(value)}
+        secureTextEntry={true}
         value={password}
         style={styles.input}
       />

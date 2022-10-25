@@ -8,28 +8,35 @@ import { login } from '../reducers/user';
 export default function SignUpScreen({navigation}) {
 
 const dispatch = useDispatch();
+
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
 
-  const handleSubmit = () => {
+  const goSignIn = () => {
     navigation.navigate('SignIn');
   };
 
   const handleRegister = () => {
-    fetch('http://192.168.10.144:3000/users/signup', {
+    fetch('http://192.168.10.172:3000/users/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name, email: email, password: password }),
     }).then(response => response.json())
       .then(data => {
-        if (data.result) {
+        if (data.result && EMAIL_REGEX.test(email))
+       {
           dispatch(login({ email: email }));
           setName('');
           setEmail('');
           setPassword('');
           navigation.navigate('UserProfile');
+        }
+        else {
+          setEmailError(true);
         }
       });
   };
@@ -53,12 +60,15 @@ const dispatch = useDispatch();
         onChangeText={(value) => setEmail(value)}
         value={email}
         style={styles.input}/>
+        {emailError && <Text style={styles.error}>Invalid email address</Text>}
       <TextInput
         placeholder="password"
         onChangeText={(value) => setPassword(value)}
+        secureTextEntry={true}
         value={password}
         style={styles.input}/>
-
+   
+  
       <TouchableOpacity
         onPress={() => handleRegister()}
         style={styles.button}
@@ -69,7 +79,7 @@ const dispatch = useDispatch();
       <Text style={styles.title2}>Already an account ?</Text>
       <Text>click here :</Text>
 
-      <TouchableOpacity onPress={() => handleSubmit()}>
+      <TouchableOpacity onPress={() => goSignIn()}>
       <Image source={require('../images/patte.jpg')} style={styles.imagePatte}/>
       </TouchableOpacity>
 
@@ -124,5 +134,9 @@ button: {
     color: '#ffffff',
     fontWeight: '700',
     fontSize: 16,
+  },
+  error: {
+    marginTop: 10,
+    color: 'red',
   },
 });
