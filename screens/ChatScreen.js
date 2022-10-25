@@ -15,9 +15,20 @@ import { useEffect, useState } from "react";
 import Pusher from "pusher-js/react-native";
 
 const pusher = new Pusher("9f99e2de0211a1e7849d", { cluster: "eu" });
-const BACKEND_ADDRESS = "http://192.168.10.176:3000";
+const BACKEND_ADDRESS = "http://192.168.1.75:3000";
 
 export default function ChatScreen({ navigation, route: { params } }) {
+  const [messages, setMessages] = useState([]);
+  const [messageText, setMessageText] = useState("");
+
+  useEffect(() => {
+    fetch(`${BACKEND_ADDRESS}/messages/sync`)
+      .then((response) => response.json())
+      .then((data) => {
+        
+        setMessages(data);
+      });
+  }, []);
 
   const handleSendMessage = () => {
     if (!messageText) {
@@ -25,30 +36,27 @@ export default function ChatScreen({ navigation, route: { params } }) {
     }
 
     const payload = {
-      text: messageText,
-      username: 'hmida',
-      createdAt: new Date(),
+      message: messageText,
+      name: "Hmida",
+      timestamp: new Date(),
       id: Math.floor(Math.random() * 100000),
     };
 
     fetch(`${BACKEND_ADDRESS}/messages/new`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
-    setMessageText('');
+    setMessageText("");
   };
 
   const handleReceiveMessage = (data) => {
     setMessages((messages) => [...messages, data]);
   };
 
-  const [messages, setMessages] = useState([]);
-  const [messageText, setMessageText] = useState("");
-
   useEffect(() => {
-    fetch(`${BACKEND_ADDRESS}/message/hmida`, { method: "PUT" });
+    fetch(`${BACKEND_ADDRESS}/message/Hmida`, { method: "PUT" });
 
     const subscription = pusher.subscribe("chat");
     subscription.bind("pusher:subscription_succeeded", () => {
@@ -79,9 +87,9 @@ export default function ChatScreen({ navigation, route: { params } }) {
           name="keyboard-backspace"
           color="#ffffff"
           size={24}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate('Home')}
         />
-        <Text style={styles.greetingText}>Welcome H'mida 👋</Text>
+        <Text style={styles.greetingText}>Welcome Hmida 👋</Text>
       </View>
 
       <View style={styles.inset}>
@@ -92,7 +100,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
               style={[
                 styles.messageWrapper,
                 {
-                  ...(message.username === params.username
+                  ...(message.name === "Hmida"
                     ? styles.messageSent
                     : styles.messageRecieved),
                 },
@@ -102,17 +110,17 @@ export default function ChatScreen({ navigation, route: { params } }) {
                 style={[
                   styles.message,
                   {
-                    ...(message.username === params.username
+                    ...(message.username === "Benoit"
                       ? styles.messageSentBg
                       : styles.messageRecievedBg),
                   },
                 ]}
               >
-                <Text style={styles.messageText}>{message.text}</Text>
+                <Text style={styles.messageText}>{message.message}</Text>
               </View>
               <Text style={styles.timeText}>
-                {new Date(message.createdAt).getHours()}:
-                {String(new Date(message.createdAt).getMinutes()).padStart(
+                {new Date(message.timestamp).getHours()}:
+                {String(new Date(message.timestamp).getMinutes()).padStart(
                   2,
                   "0"
                 )}
@@ -143,37 +151,37 @@ export default function ChatScreen({ navigation, route: { params } }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#000',
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#000",
   },
   inset: {
     flex: 1,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
-    backgroundColor: '#ffffff',
-    width: '100%',
+    backgroundColor: "#ffffff",
+    width: "100%",
     paddingTop: 20,
-    position: 'relative',
-    borderTopColor: '#ffe099',
-    borderLeftColor: '#ffe099',
-    borderRightColor: '#ffe099',
+    position: "relative",
+    borderTopColor: "#ffe099",
+    borderLeftColor: "#ffe099",
+    borderRightColor: "#ffe099",
     borderTopWidth: 4,
     borderRightWidth: 0.1,
     borderLeftWidth: 0.1,
   },
   banner: {
-    width: '100%',
-    height: '15%',
+    width: "100%",
+    height: "15%",
     paddingTop: 20,
     paddingLeft: 20,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   greetingText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 18,
     marginLeft: 15,
   },
@@ -183,92 +191,92 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     borderRadius: 24,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    maxWidth: '65%',
-    shadowColor: '#000',
+    alignItems: "flex-end",
+    justifyContent: "center",
+    maxWidth: "65%",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.20,
+    shadowOpacity: 0.2,
     shadowRadius: 6.41,
     elevation: 1.2,
   },
   messageWrapper: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
     marginBottom: 20,
   },
   messageRecieved: {
-    alignSelf: 'flex-end',
-    alignItems: 'flex-end'
+    alignSelf: "flex-end",
+    alignItems: "flex-end",
   },
   messageSent: {
-    alignSelf: 'flex-start',
-    alignItems: 'flex-start'
+    alignSelf: "flex-start",
+    alignItems: "flex-start",
   },
   messageSentBg: {
-    backgroundColor: '#ffad99',
+    backgroundColor: "#ffad99",
   },
   messageRecievedBg: {
-    backgroundColor: '#d6fff9'
+    backgroundColor: "#d6fff9",
   },
   messageText: {
-    color: '#506568',
-    fontWeight: '400',
+    color: "#506568",
+    fontWeight: "400",
   },
   timeText: {
-    color: '#506568',
+    color: "#506568",
     opacity: 0.5,
     fontSize: 10,
     marginTop: 2,
   },
   inputContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    justifySelf: 'flex-end',
-    alignContent: 'flex-start',
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    justifySelf: "flex-end",
+    alignContent: "flex-start",
     marginBottom: 30,
-    marginTop: 'auto',
-    background: 'transparent',
+    marginTop: "auto",
+    background: "transparent",
     paddingLeft: 20,
     paddingRight: 20,
   },
   input: {
-    backgroundColor: '#f0f0f0',
-    width: '80%',
+    backgroundColor: "#f0f0f0",
+    width: "80%",
     padding: 14,
     borderRadius: 30,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.20,
+    shadowOpacity: 0.2,
     shadowRadius: 6.41,
     elevation: 1.2,
   },
   sendButton: {
     borderRadius: 50,
     padding: 16,
-    backgroundColor: '#ffe099',
+    backgroundColor: "#ffe099",
     marginLeft: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.20,
+    shadowOpacity: 0.2,
     shadowRadius: 6.41,
     elevation: 1.2,
   },
   buttonText: {
-    color: '#ffffff',
-    fontWeight: '800',
-    textTransform: 'uppercase'
+    color: "#ffffff",
+    fontWeight: "800",
+    textTransform: "uppercase",
   },
   scroller: {
     paddingLeft: 20,
