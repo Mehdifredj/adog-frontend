@@ -44,11 +44,13 @@ export default function SignInScreen({ navigation }) {
         onChangeText={(value) => setEmail(value)}
         value={email}
         style={styles.input}
+        
       />
 
       <TextInput
         placeholder="password"
         onChangeText={(value) => setPassword(value)}
+        secureTextEntry={true}
         value={password}
         style={styles.input}
       />
