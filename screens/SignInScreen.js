@@ -3,10 +3,16 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import {
-    Image, KeyboardAvoidingView, Platform,
-    StyleSheet, Text, View, ImageBackground,
-    TextInput, TouchableOpacity} from "react-native";
-
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -15,7 +21,7 @@ export default function SignInScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleConnection = () => {
-    fetch("http://192.168.10.203:3000/users/signin", {
+    fetch("http://192.168.10.133:3000/users/signin", {
       // requete fetch avec notre adresse IP personnelle sur la route POST signin
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -85,7 +91,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 18,
   },
-
 
   imagestyleLogoGo: {
     height: 150,
