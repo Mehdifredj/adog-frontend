@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 import HomeScreen from './screens/HomeScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import SignInScreen from './screens/SignInScreen';
@@ -9,6 +10,8 @@ import UserProfileScreen from './screens/UserProfileScreen';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
+import FilterScreen from './screens/FiltreScreen';
+import MapScreen from './screens/MapScreen';
 
 const store = configureStore({
   reducer: { user },
@@ -23,21 +26,27 @@ const TabNavigator = () => {
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
-        if (route.name === 'SignUp') {
-          iconName = 'location-arrow';
-        } else if (route.name === 'SignIn') {
-          iconName = 'map-pin';
+        if (route.name === 'Swipe') {
+          iconName = 'heart';
+        } else if (route.name === 'Chat') {
+          iconName = 'comments'; 
+        } else if(route.name ==='My Profile'){
+          iconName = 'paw'; 
+        }else if(route.name==='Filters'){
+          iconName='sliders';
         }
+
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#ec6e5b',
-      tabBarInactiveTintColor: '#335561',
+      tabBarActiveTintColor: '#F1890F',
+      tabBarInactiveTintColor: '#9c9c9c',
       headerShown: false,
     })}>
-      <Tab.Screen name="SignUp" component={SignUpScreen} />
-      <Tab.Screen name="SignIn" component={SignInScreen} />
-      <Tab.Screen name="UserProfile" component={UserProfileScreen} />
+      <Tab.Screen name="Swipe" component={SignUpScreen} />
+      <Tab.Screen name="Chat" component={SignInScreen} />
+      <Tab.Screen name="My Profile" component={UserProfileScreen}/>
+      <Tab.Screen name="Filters" component={MapScreen}/>
     </Tab.Navigator>
   );
 };

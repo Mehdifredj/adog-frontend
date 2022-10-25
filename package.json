@@ -15,7 +15,7 @@
     "@reduxjs/toolkit": "^1.8.6",
     "expo": "^46.0.16",
     "expo-camera": "^12.3.0",
-    "expo-location": "^14.3.0",
+    "expo-location": "~14.3.0",
     "expo-status-bar": "~1.4.0",
     "express-fileupload": "^1.4.0",
     "install": "^0.13.0",
@@ -24,6 +24,7 @@
     "react-native-maps": "0.31.1",
     "react-native-safe-area-context": "4.3.1",
     "react-native-screens": "~3.15.0",
+    "react-native-svg": "^13.4.0",
     "react-redux": "^8.0.4",
     "redux-persist": "^6.0.0"
   },
