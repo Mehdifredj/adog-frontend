@@ -56,7 +56,7 @@ export default function UserProfilScreen({ navigation }) {
               aboutMyOwner: data.aboutMyOwner,
             })
           );
-          navigation.navigate("PrefScreen");
+          navigation.navigate("Filters");
         }
       });
   };
