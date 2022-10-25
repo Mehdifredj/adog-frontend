@@ -49,6 +49,7 @@ const TabNavigator = () => {
       <Tab.Screen name="Chat" component={SignInScreen} />
       <Tab.Screen name="My Profile" component={UserProfileScreen}/>
       <Tab.Screen name="Filters" component={MapScreen}/>
+      <Tab.Screen name="PrefScreen" component={Prefscreen}/>
     </Tab.Navigator>
   );
 };

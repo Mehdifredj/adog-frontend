@@ -18,7 +18,7 @@ import { updateProfil } from "../reducers/user";
 export default function UserProfilScreen({navigation}) {
 
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value.email)
+  const user = useSelector((state) => state.user.value.token)
 
   const [name, setName] = useState("");
   const [breed, setBreed] = useState("");
@@ -29,10 +29,11 @@ export default function UserProfilScreen({navigation}) {
   const [aboutMyOwner, setAboutMyOwner] = useState("");
 
   const handleRegister = () => {
-    fetch(`http://192.168.10.172:3000/users/update/${user}`, {
+    fetch(`http://192.168.10.172:3000/users/update/${user.token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+
         name : name,
         breed: breed,
         age: age,
