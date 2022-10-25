@@ -10,17 +10,16 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Switch
+  Switch,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfil } from "../reducers/user";
 
-export default function UserProfilScreen({navigation}) {
-
+export default function UserProfilScreen({ navigation }) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value.token)
-
-  const [name, setName] = useState("");
+  const user = useSelector((state) => state.user.value);
+  console.log(user);
+  const [name, setName] = useState(user.name);
   const [breed, setBreed] = useState("");
   const [age, setAge] = useState(0);
   const [gender, setGender] = useState("");
@@ -29,12 +28,11 @@ export default function UserProfilScreen({navigation}) {
   const [aboutMyOwner, setAboutMyOwner] = useState("");
 
   const handleRegister = () => {
-    fetch(`http://192.168.10.172:3000/users/update/${user.token}`, {
-      method: "POST",
+    fetch(`http://192.168.43.169:3000/users/update/${user.token}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-
-        name : name,
+        name: name,
         breed: breed,
         age: age,
         gender: gender,
@@ -44,7 +42,8 @@ export default function UserProfilScreen({navigation}) {
       }),
     })
       .then((response) => response.json())
-      .then((data) => { 
+      .then((data) => {
+        console.log(data);
         if (data.result) {
           dispatch(
             updateProfil({

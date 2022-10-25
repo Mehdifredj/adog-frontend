@@ -16,18 +16,18 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
   const [emailError, setEmailError] = useState("");
 
   const goSignIn = () => {
-    navigation.navigate('SignIn');
+    navigation.navigate('Chat');
   };
 
   const handleRegister = () => {
-    fetch('http://192.168.10.172:3000/users/signup', {
+    fetch('http://192.168.43.169:3000/users/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name, email: email, password: password }),
     }).then(response => response.json())
       .then(data => {
         if (data.result && EMAIL_REGEX.test(email)){
-          dispatch(login({ email: email }));
+          dispatch(login({ email: email, token: data.token, name : data.name }));
           setName('');
           setEmail('');
           setPassword('');
