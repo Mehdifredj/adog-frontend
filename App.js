@@ -6,6 +6,7 @@ import HomeScreen from './screens/HomeScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import SignInScreen from './screens/SignInScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
+import Prefscreen from './screens/Prefscreen';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
@@ -38,6 +39,7 @@ const TabNavigator = () => {
       <Tab.Screen name="SignUp" component={SignUpScreen} />
       <Tab.Screen name="SignIn" component={SignInScreen} />
       <Tab.Screen name="UserProfile" component={UserProfileScreen} />
+      <Stack.Screen name="PrefScreen" component={Prefscreen} />
     </Tab.Navigator>
   );
 };
