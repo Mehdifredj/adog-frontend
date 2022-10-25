@@ -29,18 +29,34 @@ export default function UserProfilScreen({navigation}) {
   const [aboutMyOwner, setAboutMyOwner] = useState("");
 
   const handleRegister = () => {
-    fetch('http://192.168.10.166:3000/users/update', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name, breed: breed, age: age, gender: gender,
-        vaccins: vaccins, aboutMe: aboutMe, aboutMyOwner: aboutMyOwner }),
-    }).then(response => response.json())
-      .then(data => {
-        console.log(data);
-        if (data.result){
-          dispatch(updateProfil({ name: name, breed: breed, age: age, gender: gender,
-            vaccins: vaccins, aboutMe: aboutMe, aboutMyOwner: aboutMyOwner }));
-          navigation.navigate('SignIn');
+    fetch(`http://192.168.10.172:3000/users/update/${user}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name : name,
+        breed: breed,
+        age: age,
+        gender: gender,
+        vaccins: vaccins,
+        aboutMe: aboutMe,
+        aboutMyOwner: aboutMyOwner,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => { 
+        if (data.result) {
+          dispatch(
+            updateProfil({
+              name: data.name,
+              breed: data.breed,
+              age: data.age,
+              gender: data.gender,
+              vaccins: data.vaccins,
+              aboutMe: data.aboutMe,
+              aboutMyOwner: data.aboutMyOwner,
+            })
+          );
+          navigation.navigate("PrefScreen");
         }
       });
   };
@@ -110,8 +126,11 @@ export default function UserProfilScreen({navigation}) {
           multiline={true}
         />
       </View>
-      <TouchableOpacity style={styles.buttonSubmit} activeOpacity={0.8}
-             onPress={() => handleRegister()} >
+      <TouchableOpacity
+        style={styles.buttonSubmit}
+        activeOpacity={0.8}
+        onPress={() => handleRegister()}
+      >
         <Text style={styles.textButton}>Submit</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
