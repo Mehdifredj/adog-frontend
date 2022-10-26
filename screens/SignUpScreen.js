@@ -20,7 +20,7 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
   };
 
   const handleRegister = () => {
-    fetch('http://192.168.43.169:3000/users/signup', {
+    fetch('http://192.168.2.102:3000/users/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name, email: email, password: password }),
