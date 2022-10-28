@@ -2,19 +2,23 @@ Arguments:
   /usr/local/bin/node /usr/local/bin/yarn install
 
 PATH: 
-  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  /opt/homebrew/opt/mysql-client/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/mysql/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/opt/mysql-client/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/mysql/bin
 
 Yarn version: 
   1.22.19
 
 Node version: 
-  16.17.0
+  16.15.0
 
 Platform: 
   darwin arm64
 
 Trace: 
+<<<<<<< HEAD
   SyntaxError: /Users/mac/Desktop/Adog/adog-frontend/package.json: Unexpected token < in JSON at position 462
+=======
+  SyntaxError: /Users/capucinemahe/Desktop/adog/frontend/package.json: Unexpected token < in JSON at position 462
+>>>>>>> 3819dca0a46e4e162bfd8562a900750528ebb448
       at JSON.parse (<anonymous>)
       at /usr/local/lib/node_modules/yarn/lib/cli.js:1629:59
       at Generator.next (<anonymous>)
