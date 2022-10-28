@@ -1,39 +1,65 @@
 import { useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import React from "react";
-import { Image, KeyboardAvoidingView, Platform, StyleSheet,
-  Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
-import { login } from '../reducers/user';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { login } from "../reducers/user";
+import BACKEND_IP from "../variable";
 
-export default function SignUpScreen({navigation}) {
-const dispatch = useDispatch();
+export default function SignUpScreen({ navigation }) {
+  const dispatch = useDispatch();
 
-const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    
+  const EMAIL_REGEX =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-
-  const goSignIn = () => {
-    navigation.navigate('Chat');
-  };
+  const [messagealert, setMessagealert] = useState("");
 
   const handleRegister = () => {
-    fetch('http://192.168.43.169:3000/users/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    console.log(BACKEND_IP);
+    if (name === "" || password === "" || email === "") {
+      setMessagealert("Attention un des champs n'est pas rempli");
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      setMessagealert("Attention le format de ladresse email est incorrect");
+      return
+    }
+
+    fetch(`${BACKEND_IP}/users/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: name, email: email, password: password }),
-    }).then(response => response.json())
-      .then(data => {
-        if (data.result && EMAIL_REGEX.test(email)){
-          dispatch(login({ email: email, token: data.token, name : data.name }));
-          setName('');
-          setEmail('');
-          setPassword('');
-          navigation.navigate('My Profile');
-        } else {
-          setEmailError(true);
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("data result !!!!!!!!!!");
+          dispatch(login({ email: email, token: data.token, name: data.name }));
+          setName("");
+          setEmail("");
+          setPassword("");
+          navigation.navigate('TabNavigator', { screen: 'AdogScreen' });
+        } else if (
+          !data.result &&
+          data.message === "This email is already used"
+        ) {
+          setMessagealert(
+            "Nous sommes désolé mais cette adresse email est déja utilisée"
+          );
         }
       });
   };
@@ -41,8 +67,8 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}>
-
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <Image style={styles.imageLogo} source={require("../images/logo.jpg")} />
       <Text style={styles.title}>Welcome !</Text>
 
@@ -56,30 +82,34 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
         placeholder="email"
         onChangeText={(value) => setEmail(value)}
         value={email}
-        style={styles.input}/>
-        {emailError && <Text style={styles.error}>Invalid email address</Text>}
+        style={styles.input}
+      />
       <TextInput
         placeholder="password"
         onChangeText={(value) => setPassword(value)}
         secureTextEntry={true}
         value={password}
-        style={styles.input}/>
-   
-  
+        style={styles.input}
+      />
+      <Text style={styles.messagealert}>{messagealert}</Text>
+
       <TouchableOpacity
         onPress={() => handleRegister()}
         style={styles.button}
-        activeOpacity={0.8} >
+        activeOpacity={0.8}
+      >
         <Text style={styles.textButton}>Submit</Text>
       </TouchableOpacity>
 
       <Text style={styles.title2}>Already an account ?</Text>
       <Text>click here :</Text>
 
-      <TouchableOpacity onPress={() => goSignIn()}>
-      <Image source={require('../images/patte.jpg')} style={styles.imagePatte}/>
+      <TouchableOpacity onPress={() => navigation.navigate("SignInScreen")}>
+        <Image
+          source={require("../images/patte.jpg")}
+          style={styles.imagePatte}
+        />
       </TouchableOpacity>
-
     </KeyboardAvoidingView>
   );
 }
@@ -87,15 +117,15 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "white",
   },
   title: {
     fontSize: 40,
-    color: '#F1890F',
+    color: "#F1890F",
     marginTop: 40,
-    fontWeight: '800',
+    fontWeight: "800",
   },
   title2: {
     marginBottom: 10,
@@ -111,29 +141,33 @@ const styles = StyleSheet.create({
     height: 50,
   },
   input: {
-  width: '80%',
-  marginTop: 25,
-  borderBottomColor: '#F1890F',
-  borderBottomWidth: 1,
-  fontSize: 18,
-},
-button: {
-    alignItems: 'center',
+    width: "80%",
+    marginTop: 25,
+    borderBottomColor: "#F1890F",
+    borderBottomWidth: 1,
+    fontSize: 18,
+  },
+  button: {
+    alignItems: "center",
     paddingTop: 12,
     paddingBottom: 12,
-    width: '50%',
+    width: "50%",
     marginTop: 40,
-    backgroundColor: '#F1890F',
+    backgroundColor: "#F1890F",
     borderRadius: 10,
     marginBottom: 40,
   },
   textButton: {
-    color: '#ffffff',
-    fontWeight: '700',
+    color: "#ffffff",
+    fontWeight: "700",
     fontSize: 16,
   },
   error: {
     marginTop: 10,
-    color: 'red',
+    color: "red",
+  },
+  messagealert: {
+    margin: "0.9%",
+    color: "red",
   },
 });

@@ -9,25 +9,44 @@ import {
   View,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useSelector } from "react-redux";
 
 import React from "react";
 import { useEffect, useState } from "react";
 import Pusher from "pusher-js/react-native";
+import BACKEND_IP from "../variable";
 
 const pusher = new Pusher("9f99e2de0211a1e7849d", { cluster: "eu" });
-const BACKEND_ADDRESS = "http://192.168.1.75:3000";
+
 
 export default function ChatScreen({ navigation, route: { params } }) {
+  const user = useSelector((state) => state.user.value.name);
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
 
   useEffect(() => {
-    fetch(`${BACKEND_ADDRESS}/messages/sync`)
+    fetch(`${BACKEND_IP}/messages/sync`)
       .then((response) => response.json())
       .then((data) => {
-        
         setMessages(data);
+
       });
+  }, []);
+
+  const handleReceiveMessage = (data) => {
+    console.log(data)
+    setMessages((messages) => [...messages, data]);
+  };
+
+  useEffect(() => {
+    fetch(`${BACKEND_IP}/messages/Hmida`, { method: "PUT" });
+
+    const subscription = pusher.subscribe("messagechannel");
+    subscription.bind("pusher:subscription_succeeded", () => {
+      subscription.bind("inserted", handleReceiveMessage);
+    });
+
+    return () => fetch(`${BACKEND_IP}/messages/new`, { method: "DELETE" });
   }, []);
 
   const handleSendMessage = () => {
@@ -42,40 +61,15 @@ export default function ChatScreen({ navigation, route: { params } }) {
       id: Math.floor(Math.random() * 100000),
     };
 
-    fetch(`${BACKEND_ADDRESS}/messages/new`, {
+    fetch(`${BACKEND_IP}/messages/new`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
     setMessageText("");
+    this.scrollView.scrollToEnd()
   };
-
-  const handleReceiveMessage = (data) => {
-    setMessages((messages) => [...messages, data]);
-  };
-
-  useEffect(() => {
-    fetch(`${BACKEND_ADDRESS}/message/Hmida`, { method: "PUT" });
-
-    const subscription = pusher.subscribe("chat");
-    subscription.bind("pusher:subscription_succeeded", () => {
-      subscription.bind("message", handleReceiveMessage);
-    });
-
-    return () => fetch(`${BACKEND_ADDRESS}/messages/new`, { method: "DELETE" });
-  }, []);
-
-  // useEffect(() => {
-  //   const pusher = new Pusher("9f99e2de0211a1e7849d", {
-  //     cluster: "eu",
-  //   });
-
-  //   const channel = pusher.subscribe("messages");
-  //   channel.bind("inserted", (data) => {
-  //     alert(JSON.stringify(data));
-  //   });
-  // }, []);
 
   return (
     <KeyboardAvoidingView
@@ -87,13 +81,15 @@ export default function ChatScreen({ navigation, route: { params } }) {
           name="keyboard-backspace"
           color="#ffffff"
           size={24}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() =>
+            navigation.navigate("TabNavigator", { screen: "Messagerie" })
+          }
         />
-        <Text style={styles.greetingText}>Welcome Hmida 👋</Text>
+        <Text style={styles.greetingText}>Conversation avec Mehdy 🐶</Text>
       </View>
 
       <View style={styles.inset}>
-        <ScrollView style={styles.scroller}>
+        <ScrollView style={styles.scroller} ref={(scrollView) => { this.scrollView = scrollView }}>
           {messages.map((message, i) => (
             <View
               key={i}

@@ -13,15 +13,19 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import BACKEND_IP from "../variable";
 
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState(""); //initialisation des etats pour l'email et le passxord
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("Hmida"); //initialisation des etats pour l'email et le passxord
+  const [password, setPassword] = useState("Hmida");
+  const [messagealert, setMessagealert] = useState('')
 
   const handleConnection = () => {
-    fetch("http://192.168.43.169:3000/users/signin", {
+    console.log(BACKEND_IP)
+    console.log('rfdfs dfsd fs')
+    fetch(`${BACKEND_IP}/users/signin`, {
       // requete fetch avec notre adresse IP personnelle sur la route POST signin
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -29,12 +33,18 @@ export default function SignInScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+
+        console.log('console log de la data',data)
+        if (!data.result) {
+          setMessagealert('Désole vos identifiants sont incorrect')
+        }
+
         if (data.result) {
           dispatch(login({ email: data.email, token: data.token, name: data.name })); // dispatch pour stocker les données dans le reducer
           setEmail("");
           setPassword("");
-          navigation.navigate("Filters"); // permet la redirection vers la page userProfile.
-        }
+          navigation.navigate('TabNavigator', { screen: 'AdogScreen' }); // permet la redirection vers la page userProfile.
+        } 
       });
   };
 
@@ -60,7 +70,7 @@ export default function SignInScreen({ navigation }) {
         value={password}
         style={styles.input}
       />
-
+<Text style={styles.messagealert}>{messagealert}</Text>
       <TouchableOpacity onPress={() => handleConnection()}>
         <Text style={styles.titleLogoGO}>Go!</Text>
         <Image
@@ -107,5 +117,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginLeft: 65,
     marginTop: 120,
+  },
+  messagealert: {
+    margin: "0.9%",
+    color: "red",
   },
 });

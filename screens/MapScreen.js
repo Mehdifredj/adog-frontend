@@ -26,7 +26,7 @@ useEffect(() => {
       }, []);
     
       useEffect(() => {
-        fetch(`http://192.168.10.133:3000/places/`)
+        fetch(`http://192.168.1.75:3000/places/`)
         .then(response => response.json())
         .then(dataPlace => {
         dispatch(allPlaces(dataPlace.place));
@@ -45,7 +45,7 @@ useEffect(() => {
           longitude: tempCoordinates.longitude
          }));
     
-         fetch('http://192.168.10.133:3000/places', {
+         fetch('http://192.168.1.75:3000/places', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
