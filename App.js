@@ -52,12 +52,15 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="SignInScreen" component={SignInScreen} />
+
+        <Stack.Screen name="ChatScreen" component={ChatScreen} />
+
           <Stack.Screen name="MessageScreen" component={MessagerieScreen} />
+
+          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-          <Stack.Screen name="ChatScreen" component={ChatScreen} />
           <Stack.Screen name="AdogScreen" component={AdogScreen} />
-          <Stack.Screen name="SignInScreen" component={SignInScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>

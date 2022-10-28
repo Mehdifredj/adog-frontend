@@ -24,7 +24,6 @@ export default function SignUpScreen({ navigation }) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [messagealert, setMessagealert] = useState("");
 
   const handleRegister = () => {
