@@ -21,7 +21,7 @@ export default function SignInScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleConnection = () => {
-    fetch("http://192.168.10.121:3000/users/signin", {
+    fetch("http://192.168.2.102:3000/users/signin", {
       // requete fetch avec notre adresse IP personnelle sur la route POST signin
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -30,10 +30,10 @@ export default function SignInScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(login({ email: email })); // dispatch pour stocker les données dans le reducer
+          dispatch(login({ email: data.email, token: data.token, name: data.name })); // dispatch pour stocker les données dans le reducer
           setEmail("");
           setPassword("");
-          navigation.navigate("My Profile"); // permet la redirection vers la page userProfile.
+          navigation.navigate("Filters"); // permet la redirection vers la page userProfile.
         }
       });
   };
