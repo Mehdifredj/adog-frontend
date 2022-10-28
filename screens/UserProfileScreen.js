@@ -10,7 +10,7 @@ import {
   TextInput,
   TouchableOpacity,
   Switch,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfil, addPhoto } from "../reducers/user";
