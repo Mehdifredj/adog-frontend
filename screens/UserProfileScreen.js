@@ -17,6 +17,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfil, login } from "../reducers/user";
 import SelectList from "react-native-dropdown-select-list";
+import IP_VARIABLE from "../variable";
 
 export default function UserProfilScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ export default function UserProfilScreen({ navigation }) {
   // Permet de charger au lancement de la page les informations du profil garder en BDD
 
   useEffect(() => {
-    fetch(`http://192.168.10.173:3000/users/getuser/${user.token}`)
+    fetch(`http://${IP_VARIABLE}/users/getuser/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
         setName(data.name);
@@ -60,7 +61,7 @@ export default function UserProfilScreen({ navigation }) {
       });
   }, []);
   const handleRegister = () => {
-    fetch(`http://192.168.10.172:3000/users/update/${user.token}`, {
+    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -116,7 +117,7 @@ export default function UserProfilScreen({ navigation }) {
       type: "image/jpeg",
     });
 
-    fetch("http://172.20.10.4:3000/upload", {
+    fetch(`http://${IP_VARIABLE}/upload`, {
       method: "POST",
       body: formData,
     })
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
   buttonSubmit: {
     alignItems: "center",
     paddingTop: "3%",
-    paddingBottom: "3%",
+    paddingBottom: "3%", 
     width: "50%",
     marginTop: "8%",
     backgroundColor: "#F1890F",
