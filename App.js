@@ -44,8 +44,6 @@ const TabNavigator = () => {
         }else if(route.name==='Filters'){
           iconName='sliders';
         }
-
-
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
       tabBarActiveTintColor: '#F1890F',
@@ -57,7 +55,6 @@ const TabNavigator = () => {
       <Tab.Screen name="PrefScreen" component={Prefscreen}/>
       <Tab.Screen name="Swipes" component={SwipesScreen}/>
     
-
     </Tab.Navigator>
   );
 };
