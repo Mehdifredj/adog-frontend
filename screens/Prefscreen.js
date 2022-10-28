@@ -2,7 +2,7 @@ import { View, Text,StyleSheet,Image,TextInput,Switch } from 'react-native'
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import { useState } from "react";
-
+import SelectList from 'react-native-dropdown-select-list';
 
 
 export default function Prefscreen() {

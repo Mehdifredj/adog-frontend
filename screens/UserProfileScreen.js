@@ -1,5 +1,4 @@
-import { useState } from "react";
-import React from "react";
+import { useState, useEffect } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -11,24 +10,54 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Switch,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProfil } from "../reducers/user";
+import { updateProfil, login } from "../reducers/user";
+import SelectList from "react-native-dropdown-select-list";
 
 export default function UserProfilScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  console.log(user);
-  const [name, setName] = useState(user.name);
+
+  const [name, setName] = useState("");
   const [breed, setBreed] = useState("");
-  const [age, setAge] = useState(0);
+  const [age, setAge] = useState(null);
   const [gender, setGender] = useState("");
   const [vaccins, setVaccins] = useState(false);
   const [aboutMe, setAboutMe] = useState("");
   const [aboutMyOwner, setAboutMyOwner] = useState("");
+  const [selected, setSelected] = useState("");
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+    fetch("https://api.thedogapi.com/v1/breeds/")
+      .then((response) => response.json())
+      .then((data) => {
+        const resultMap = data.map((dataResult, i) => {
+          return dataResult.name;
+        });
+        setData(resultMap);
+      });
+  });
+
+  // Permet de charger au lancement de la page les informations du profil garder en BDD
+
+  useEffect(() => {
+    fetch(`http://192.168.10.173:3000/users/getuser/${user.token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setName(data.name);
+        setBreed(data.breed);
+        setAge(data.age.toString());
+        setGender(data.gender);
+        setVaccins(data.vaccins);
+        setAboutMe(data.aboutMe);
+        setAboutMyOwner(data.aboutMyOwner);
+      });
+  }, []);
   const handleRegister = () => {
-    fetch(`http://192.168.43.169:3000/users/update/${user.token}`, {
+    fetch(`http://192.168.10.173:3000/users/update/${user.token}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -43,7 +72,6 @@ export default function UserProfilScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.result) {
           dispatch(
             updateProfil({
@@ -62,79 +90,87 @@ export default function UserProfilScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <Image
-        style={styles.imageUser}
-        source={require("../images/user_default.png")}
-      />
-      <Text style={styles.title}>Hi ! I'm ...</Text>
+    <ScrollView>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <Image
+          style={styles.imageUser}
+          source={require("../images/user_default.png")}
+        />
+        <Text style={styles.title}>Hi ! I'm ...</Text>
 
-      <TextInput
-        placeholder="name"
-        onChangeText={(value) => setName(value)}
-        value={name}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="breed"
+        <TextInput
+          placeholder="Name"
+          onChangeText={(value) => setName(value)}
+          value={name}
+          style={styles.input}
+        />
+        {/* <TextInput
+        placeholder="Breed"
         onChangeText={(value) => setBreed(value)}
         value={breed}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="age"
-        onChangeText={(value) => setAge(value)}
-        value={age}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="gender"
-        onChangeText={(value) => setGender(value)}
-        value={gender}
-        style={styles.input}
-      />
-      <View style={styles.containerToggle}>
-        <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
-        <Switch
-          style={styles.toggle}
-          value={vaccins}
-          onValueChange={(value) => setVaccins(value)}
-          trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
-          ios_backgroundColor="#dcdcdc"
-        />
-        
-      </View>
+        style={styles.input} */}
+        <SelectList 
+          data={data} 
+          setSelected={setSelected} 
+          placeholder="Select your Breed"
+          borderColor=''
+          />
 
-      <View style={styles.containerAbout}>
-        <Text style={styles.titleAbout}>About me :</Text>
         <TextInput
-          placeholder="Please write something here"
-          onChangeText={(value) => setAboutMe(value)}
-          value={aboutMe}
-          style={styles.about}
-          multiline={true}
+          keyboardType="numeric"
+          placeholder="Age"
+          onChangeText={(value) => setAge(value)}
+          value={age}
+          style={styles.input}
         />
+        <TextInput
+          placeholder="Gender"
+          onChangeText={(value) => setGender(value)}
+          value={gender}
+          style={styles.input}
+        />
+        <View style={styles.containerToggle}>
+          <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
+          <Switch
+            style={styles.toggle}
+            value={vaccins}
+            onValueChange={(value) => setVaccins(value)}
+            trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
+            ios_backgroundColor="#dcdcdc"
+          />
+        </View>
 
-        <Text style={styles.titleAbout}>About my owner :</Text>
-        <TextInput
-          placeholder="Please write something here"
-          onChangeText={(value) => setAboutMyOwner(value)}
-          value={aboutMyOwner}
-          style={styles.about}
-          multiline={true}
-        />
-      </View>
-      <TouchableOpacity
-        style={styles.buttonSubmit}
-        activeOpacity={0.8}
-        onPress={() => handleRegister()}
-      >
-        <Text style={styles.textButton}>Submit</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+        <View style={styles.containerAbout}>
+          <Text style={styles.titleAbout}>About me :</Text>
+          <TextInput
+            placeholder="Please write something here"
+            onChangeText={(value) => setAboutMe(value)}
+            value={aboutMe}
+            style={styles.about}
+            multiline={true}
+          />
+
+          <Text style={styles.titleAbout}>About my owner :</Text>
+          <TextInput
+            placeholder="Please write something here"
+            onChangeText={(value) => setAboutMyOwner(value)}
+            value={aboutMyOwner}
+            style={styles.about}
+            multiline={true}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.buttonSubmit}
+          activeOpacity={0.8}
+          onPress={() => handleRegister()}
+        >
+          <Text style={styles.textButton}>Submit</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
@@ -159,6 +195,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
   imageUser: {
+    marginTop: "11%",
     width: 200,
     height: 130,
     borderRadius: 100,
