@@ -1,21 +1,46 @@
 Arguments: 
+<<<<<<< HEAD
+  /usr/local/bin/node /usr/local/bin/yarn add xpo install react-native-svg@12.3.0
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
+=======
   /usr/local/bin/node /usr/local/bin/yarn install
 
 PATH: 
   /opt/homebrew/opt/mysql-client/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/mysql/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/opt/mysql-client/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/mysql/bin
+>>>>>>> 3819dca0a46e4e162bfd8562a900750528ebb448
 
 Yarn version: 
   1.22.19
 
 Node version: 
+<<<<<<< HEAD
+  16.16.0
+=======
   16.15.0
+>>>>>>> 3819dca0a46e4e162bfd8562a900750528ebb448
 
 Platform: 
   darwin arm64
 
 Trace: 
 <<<<<<< HEAD
+<<<<<<< HEAD
   SyntaxError: /Users/mac/Desktop/Adog/adog-frontend/package.json: Unexpected token < in JSON at position 462
+=======
+  Error: https://registry.yarnpkg.com/xpo: Not found
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66145:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:527:28)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:527:28)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:641:28)
+      at IncomingMessage.emit (node:events:539:35)
+      at endReadableNT (node:internal/streams/readable:1345:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+>>>>>>> 711e09d0a3f8eadc796f35b89ed55baeb9263305
 =======
   SyntaxError: /Users/capucinemahe/Desktop/adog/frontend/package.json: Unexpected token < in JSON at position 462
 >>>>>>> 3819dca0a46e4e162bfd8562a900750528ebb448
@@ -24,6 +49,7 @@ Trace:
       at Generator.next (<anonymous>)
       at step (/usr/local/lib/node_modules/yarn/lib/cli.js:310:30)
       at /usr/local/lib/node_modules/yarn/lib/cli.js:321:13
+>>>>>>> 3819dca0a46e4e162bfd8562a900750528ebb448
 
 npm manifest: 
   {
@@ -43,12 +69,17 @@ npm manifest:
       "@reduxjs/toolkit": "^1.8.6",
       "expo": "^46.0.16",
       "expo-camera": "^12.3.0",
+<<<<<<< HEAD
+      "expo-image-picker": "~13.3.1",
+      "expo-location": "~14.3.0",
+=======
   <<<<<<< HEAD
       "expo-image-picker": "~13.3.1",
       "expo-location": "^14.3.0",
   =======
       "expo-location": "~14.3.0",
   >>>>>>> b5cb0757c345149f7cf8ff48194558b70e8b7df0
+>>>>>>> 3819dca0a46e4e162bfd8562a900750528ebb448
       "expo-status-bar": "~1.4.0",
       "express-fileupload": "^1.4.0",
       "install": "^0.13.0",
