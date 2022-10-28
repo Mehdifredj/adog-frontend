@@ -47,7 +47,7 @@ export default function UserProfileScreen({ navigation }) {
       });
   });
 
-  // Permet de charger au lancement de la page les informations du profil garder en BDD
+  // Permet de charger au lancement de la page les informations du profil garder en BDDD
   useEffect(() => {
     fetch(`http://${IP_VARIABLE}/users/getuser/${user.token}`)
       .then((response) => response.json())
