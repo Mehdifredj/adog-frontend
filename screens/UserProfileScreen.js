@@ -12,11 +12,12 @@ import {
   TouchableOpacity,
   Switch,
   ScrollView,
-  FontAwesome
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfil, login } from "../reducers/user";
 import SelectList from "react-native-dropdown-select-list";
+import IP_VARIABLE from "../variable";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function UserProfilScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ export default function UserProfilScreen({ navigation }) {
   // Permet de charger au lancement de la page les informations du profil garder en BDD
 
   useEffect(() => {
-    fetch(`http://192.168.10.173:3000/users/getuser/${user.token}`)
+    fetch(`http://${IP_VARIABLE}/users/getuser/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
         setName(data.name);
@@ -59,12 +60,13 @@ export default function UserProfilScreen({ navigation }) {
         setAboutMyOwner(data.aboutMyOwner);
       });
   }, []);
+
   const handleRegister = () => {
-    fetch(`http://192.168.10.172:3000/users/update/${user.token}`, {
+    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name : name,
+        name: name,
         breed: breed,
         age: age,
         gender: gender,
@@ -101,21 +103,16 @@ export default function UserProfilScreen({ navigation }) {
       aspect: [4, 3],
       quality: 1,
     });
-
     // console.log(result.uri);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
-
     const formData = new FormData();
-
     formData.append("imageFromFront", {
       uri: result.uri,
       name: "photo.jpg",
       type: "image/jpeg",
     });
-
     fetch("http://172.20.10.4:3000/upload", {
       method: "POST",
       body: formData,
@@ -133,90 +130,92 @@ export default function UserProfilScreen({ navigation }) {
   });
 
   return (
-    <ScrollView>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <Image
-          style={styles.imageUser}
-          source={require("../images/user_default.png")}
-        />
-        <Text style={styles.title}>Hi ! I'm ...</Text>
-
-        <TextInput
-          placeholder="Name"
-          onChangeText={(value) => setName(value)}
-          value={name}
-          style={styles.input}
-        />
- 
-        <SelectList 
-          data={data} 
-          setSelected={setSelected} 
-          placeholder="Select your Breed"
-          borderColor=''
+    <View style={{ flex: 1 }}>
+      <ScrollView>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <Image
+            style={styles.imageUser}
+            source={require("../images/user_default.png")}
           />
+          <Text style={styles.title}>Hi ! I'm ...</Text>
 
-        <TextInput
-          keyboardType="numeric"
-          placeholder="Age"
-          onChangeText={(value) => setAge(value)}
-          value={age}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Gender"
-          onChangeText={(value) => setGender(value)}
-          value={gender}
-          style={styles.input}
-        />
-        <View style={styles.containerToggle}>
-          <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
-          <Switch
-            style={styles.toggle}
-            value={vaccins}
-            onValueChange={(value) => setVaccins(value)}
-            trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
-            ios_backgroundColor="#dcdcdc"
-          />
-        </View>
-
-        <View style={styles.containerAbout}>
-          <Text style={styles.titleAbout}>About me :</Text>
           <TextInput
-            placeholder="Please write something here"
-            onChangeText={(value) => setAboutMe(value)}
-            value={aboutMe}
-            style={styles.about}
-            multiline={true}
+            placeholder="Name"
+            onChangeText={(value) => setName(value)}
+            value={name}
+            style={styles.input}
           />
 
-          <Text style={styles.titleAbout}>About my owner :</Text>
+          <SelectList
+            data={data}
+            setSelected={setSelected}
+            placeholder="Select your Breed"
+            borderColor=""
+          />
+
           <TextInput
-            placeholder="Please write something here"
-            onChangeText={(value) => setAboutMyOwner(value)}
-            value={aboutMyOwner}
-            style={styles.about}
-            multiline={true}
+            keyboardType="numeric"
+            placeholder="Age"
+            onChangeText={(value) => setAge(value)}
+            value={age}
+            style={styles.input}
           />
-        </View>
+          <TextInput
+            placeholder="Gender"
+            onChangeText={(value) => setGender(value)}
+            value={gender}
+            style={styles.input}
+          />
+          <View style={styles.containerToggle}>
+            <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
+            <Switch
+              style={styles.toggle}
+              value={vaccins}
+              onValueChange={(value) => setVaccins(value)}
+              trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
+              ios_backgroundColor="#dcdcdc"
+            />
+          </View>
 
-        <TouchableOpacity style={styles.pick} onPress={pickImage}>
-          <Text>
-            Pick an image from camera roll <FontAwesome name={"image"} />
-          </Text>
-        </TouchableOpacity>
-        <View style={styles.gallery}>{gallery}</View>
+          <View style={styles.containerAbout}>
+            <Text style={styles.titleAbout}>About me :</Text>
+            <TextInput
+              placeholder="Please write something here"
+              onChangeText={(value) => setAboutMe(value)}
+              value={aboutMe}
+              style={styles.about}
+              multiline={true}
+            />
 
-        <TouchableOpacity
-          style={styles.buttonSubmit}
-          activeOpacity={0.8}
-          onPress={() => handleRegister()}>
-          <Text style={styles.textButton}>Submit</Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </ScrollView>
+            <Text style={styles.titleAbout}>About my owner :</Text>
+            <TextInput
+              placeholder="Please write something here"
+              onChangeText={(value) => setAboutMyOwner(value)}
+              value={aboutMyOwner}
+              style={styles.about}
+              multiline={true}
+            />
+          </View>
+
+          <TouchableOpacity style={styles.pick} onPress={pickImage}>
+            <Text>Pick an image from camera roll</Text>
+            <FontAwesome name={"image"} />
+          </TouchableOpacity>
+          <View style={styles.gallery}>{gallery}</View>
+
+          <TouchableOpacity
+            style={styles.buttonSubmit}
+            activeOpacity={0.8}
+            onPress={() => handleRegister()}
+          >
+            <Text style={styles.textButton}>Submit</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -286,6 +285,7 @@ const styles = StyleSheet.create({
   pick: {
     marginTop: "8%",
     color: "#F1890F",
+    flexDirection: "row",
   },
   gallery: {
     flex: 1,
