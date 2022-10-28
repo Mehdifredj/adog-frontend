@@ -2,6 +2,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+
+
+
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import { Provider } from 'react-redux';
@@ -16,6 +19,7 @@ import HomeScreen from './screens/HomeScreen';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import ChatScreen from './screens/ChatScreen';
+
 import UserProfileScreen from './screens/UserProfileScreen';
 
 
@@ -49,11 +53,10 @@ const TabNavigator = () => {
     })}>
        <Tab.Screen name="SignUp" component={SignUpScreen} />
        <Tab.Screen name="SignIn" component={SignInScreen} />
-      <Tab.Screen name="Filters" component={FiltersScreen}/>
-      <Tab.Screen name="Swipes" component={SwipesScreen}/>
-       <Tab.Screen name="Chat" component={ChatScreen} /> 
+       <Tab.Screen name="Filters" component={FiltersScreen}/>
+       <Tab.Screen name="Swipes" component={SwipesScreen}/>
        <Tab.Screen name="Profile" component={UserProfileScreen} />
-    
+       <Tab.Screen name="Chat" component={ChatScreen} />
 
     </Tab.Navigator>
   );

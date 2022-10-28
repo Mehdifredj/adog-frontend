@@ -17,6 +17,7 @@ import { updateProfil, addPhoto } from "../reducers/user";
 import SelectList from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import IP_VARIABLE from "../variable";
 
 export default function UserProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -47,9 +48,7 @@ export default function UserProfileScreen({ navigation }) {
 
   // Permet de charger au lancement de la page les informations du profil garder en BDD
   useEffect(() => {
-    fetch(
-      "http://172.20.10.4:3000/users/getuser/ENtRKhVIAUmwlyijllmaAgB3CpNnbPYv"
-    )
+    fetch(`http://${IP_VARIABLE}/users/getuser/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
         setName(data.name);
@@ -62,51 +61,13 @@ export default function UserProfileScreen({ navigation }) {
       });
   }, []);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    // console.log(result.uri);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-
-    const formData = new FormData();
-
-    formData.append("imageFromFront", {
-      uri: result.uri,
-      name: "photo.jpg",
-      type: "image/jpeg",
-    });
-
-    fetch("http://172.20.10.4:3000/upload", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        data.result && dispatch(addPhoto(data.url));
-      });
-  };
-
-  const userImage = useSelector((state) => state.user.value.images);
-
-  const gallery = userImage.map((data, i) => {
-    return <Image style={styles.images} key={i} source={{ uri: data }} />;
-  });
-
-  // fonction qui permet de submit les informations si modifiées
+   // fonction qui permet de submit les informations si modifiées
   const handleRegister = () => {
-    fetch(`http://172.20.10.4:3000/users/update/${user.token}`, {
+    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: name,
+        name : name,
         breed: breed,
         age: age,
         gender: gender,
@@ -135,6 +96,44 @@ export default function UserProfileScreen({ navigation }) {
         }
       });
   };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    // console.log(result.uri);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+
+    const formData = new FormData();
+
+    formData.append("imageFromFront", {
+      uri: result.uri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    });
+
+    fetch(`http://${IP_VARIABLE}/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        data.result && dispatch(addPhoto(data.url));
+      });
+  };
+
+  const userImage = useSelector((state) => state.user.value.images);
+
+  const gallery = userImage.map((data, i) => {
+    return <Image style={styles.images} key={i} source={{ uri: data }} />;
+  });
 
   return (
 
@@ -304,7 +303,7 @@ const styles = StyleSheet.create({
   buttonSubmit: {
     alignItems: "center",
     paddingTop: "3%",
-    paddingBottom: "3%",
+    paddingBottom: "3%", 
     width: "50%",
     marginTop: "8%",
     backgroundColor: "#F1890F",

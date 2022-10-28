@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import { Image, KeyboardAvoidingView, Platform,
   StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+  import IP_VARIABLE from "../variable";
 
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -13,7 +14,7 @@ export default function SignInScreen({ navigation }) {
   const [messagealert, setMessagealert] = useState('')
 
   const handleConnection = () => {
-    fetch("http://172.20.10.4:3000/users/signin", {
+    fetch(`http://${IP_VARIABLE}/users/signin`, {
       // requete fetch avec notre adresse IP personnelle sur la route POST signin
       method: "POST",
       headers: { "Content-Type": "application/json" },

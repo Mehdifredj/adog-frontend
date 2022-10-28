@@ -5,6 +5,7 @@ import { Image, KeyboardAvoidingView, Platform,
   ScrollView,
   StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { login } from "../reducers/user";
+import IP_VARIABLE from "../variable";
 
 export default function SignUpScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ export default function SignUpScreen({ navigation }) {
       setMessagealert("Attention le format de ladresse email est incorrect");
       return
     }
-    fetch("http://172.20.10.4:3000/users/signup", {
+    fetch(`http://${IP_VARIABLE}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: name, email: email, password: password }),
