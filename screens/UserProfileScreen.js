@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import {
   Image,
-  KeyboardAvoidingView,
+ KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
@@ -18,6 +18,7 @@ import SelectList from "react-native-dropdown-select-list";
 import IP_VARIABLE from "../variable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
+
 
 export default function UserProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -61,6 +62,42 @@ export default function UserProfileScreen({ navigation }) {
       });
   }, []);
 
+   // fonction qui permet de submit les informations si modifiées
+  const handleRegister = () => {
+    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name : name,
+        breed: breed,
+        age: age,
+        gender: gender,
+        vaccins: vaccins,
+        aboutMe: aboutMe,
+        aboutMyOwner: aboutMyOwner,
+        images: image,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(
+            updateProfil({
+              name: data.name,
+              breed: data.breed,
+              age: data.age,
+              gender: data.gender,
+              vaccins: data.vaccins,
+              aboutMe: data.aboutMe,
+              aboutMyOwner: data.aboutMyOwner,
+              images: data.image,
+            })
+          );
+          navigation.navigate("Filters");
+        }
+      });
+  };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -94,41 +131,9 @@ export default function UserProfileScreen({ navigation }) {
     return <Image style={styles.images} key={i} source={{ uri: data }} />;
   });
 
-  // fonction qui permet de submit les informations si modifiées
-  const handleRegister = () => {
-    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: name,
-        breed: breed,
-        age: age,
-        gender: gender,
-        vaccins: vaccins,
-        aboutMe: aboutMe,
-        aboutMyOwner: aboutMyOwner,
-        images: image,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(
-            updateProfil({
-              name: data.name,
-              breed: data.breed,
-              age: data.age,
-              gender: data.gender,
-              vaccins: data.vaccins,
-              aboutMe: data.aboutMe,
-              aboutMyOwner: data.aboutMyOwner,
-              images: data.image,
-            })
-          );
-          navigation.navigate("Filters");
-        }
-      });
-  };
+
+
+
 
   return (
     <ScrollView>
@@ -297,7 +302,7 @@ const styles = StyleSheet.create({
   buttonSubmit: {
     alignItems: "center",
     paddingTop: "3%",
-    paddingBottom: "3%",
+    paddingBottom: "3%", 
     width: "50%",
     marginTop: "8%",
     backgroundColor: "#F1890F",
