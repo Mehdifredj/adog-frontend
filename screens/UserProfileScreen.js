@@ -1,6 +1,6 @@
 import React from "react";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Switch,
   ScrollView,
+  FontAwesome
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfil, login } from "../reducers/user";
