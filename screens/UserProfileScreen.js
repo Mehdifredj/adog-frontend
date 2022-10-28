@@ -19,7 +19,6 @@ import IP_VARIABLE from "../variable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
 
-
 export default function UserProfileScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
@@ -79,7 +78,7 @@ export default function UserProfileScreen({ navigation }) {
       name: "photo.jpg",
       type: "image/jpeg",
     });
-    fetch("http://172.20.10.4:3000/upload", {
+    fetch(`http://${IP_VARIABLE}/upload`, {
       method: "POST",
       body: formData,
     })
@@ -97,7 +96,7 @@ export default function UserProfileScreen({ navigation }) {
 
   // fonction qui permet de submit les informations si modifiées
   const handleRegister = () => {
-    fetch(`http://172.20.10.4:3000/users/update/${user.token}`, {
+    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -132,86 +131,84 @@ export default function UserProfileScreen({ navigation }) {
   };
 
   return (
+    <ScrollView>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <Image
+          style={styles.imageUser}
+          source={require("../images/user_default.png")}
+        />
+        <Text style={styles.title}>Hi ! I'm ...</Text>
 
-      <ScrollView>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        <TextInput
+          placeholder="Name"
+          onChangeText={(value) => setName(value)}
+          style={styles.input}
+        />
+
+        <SelectList
+          data={data}
+          setSelected={setSelected}
+          placeholder="Select your Breed"
+          borderColor=""
+        />
+
+        <TextInput
+          keyboardType="numeric"
+          placeholder="Age"
+          onChangeText={(value) => setAge(value)}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Gender"
+          onChangeText={(value) => setGender(value)}
+          style={styles.input}
+        />
+        <View style={styles.containerToggle}>
+          <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
+          <Switch
+            style={styles.toggle}
+            onValueChange={(value) => setVaccins(value)}
+            trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
+            ios_backgroundColor="#dcdcdc"
+          />
+        </View>
+
+        <View style={styles.containerAbout}>
+          <Text style={styles.titleAbout}>About me :</Text>
+          <TextInput
+            placeholder="Please write something here"
+            onChangeText={(value) => setAboutMe(value)}
+            style={styles.about}
+            multiline={true}
+          />
+
+          <Text style={styles.titleAbout}>About my owner :</Text>
+          <TextInput
+            placeholder="Please write something here"
+            onChangeText={(value) => setAboutMyOwner(value)}
+            style={styles.about}
+            multiline={true}
+          />
+        </View>
+
+        <TouchableOpacity style={styles.pick} onPress={pickImage}>
+          <Text>Pick an image from camera roll</Text>
+          <FontAwesome name={"image"} />
+        </TouchableOpacity>
+        <View style={styles.gallery}>{gallery}</View>
+
+        <TouchableOpacity
+          style={styles.buttonSubmit}
+          activeOpacity={0.8}
+          onPress={() => handleRegister()}
         >
-          <Image
-            style={styles.imageUser}
-            source={require("../images/user_default.png")}
-          />
-          <Text style={styles.title}>Hi ! I'm ...</Text>
-
-          <TextInput
-            placeholder="Name"
-            onChangeText={(value) => setName(value)}
-            style={styles.input}
-          />
-
-          <SelectList
-            data={data}
-            setSelected={setSelected}
-            placeholder="Select your Breed"
-            borderColor=""
-          />
-
-          <TextInput
-            keyboardType="numeric"
-            placeholder="Age"
-            onChangeText={(value) => setAge(value)}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Gender"
-            onChangeText={(value) => setGender(value)}
-            style={styles.input}
-          />
-          <View style={styles.containerToggle}>
-            <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
-            <Switch
-              style={styles.toggle}
-              onValueChange={(value) => setVaccins(value)}
-              trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
-              ios_backgroundColor="#dcdcdc"
-            />
-          </View>
-
-          <View style={styles.containerAbout}>
-            <Text style={styles.titleAbout}>About me :</Text>
-            <TextInput
-              placeholder="Please write something here"
-              onChangeText={(value) => setAboutMe(value)}
-              style={styles.about}
-              multiline={true}
-            />
-
-            <Text style={styles.titleAbout}>About my owner :</Text>
-            <TextInput
-              placeholder="Please write something here"
-              onChangeText={(value) => setAboutMyOwner(value)}
-              style={styles.about}
-              multiline={true}
-            />
-          </View>
-
-          <TouchableOpacity style={styles.pick} onPress={pickImage}>
-            <Text>Pick an image from camera roll</Text>
-            <FontAwesome name={"image"} />
-          </TouchableOpacity>
-          <View style={styles.gallery}>{gallery}</View>
-
-          <TouchableOpacity
-            style={styles.buttonSubmit}
-            activeOpacity={0.8}
-            onPress={() => handleRegister()}
-          >
-            <Text style={styles.textButton}>Submit</Text>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </ScrollView>
-
+          <Text style={styles.textButton}>Submit</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 

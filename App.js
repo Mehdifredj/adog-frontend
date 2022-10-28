@@ -4,13 +4,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import HomeScreen from './screens/HomeScreen';
-import SignUpScreen from './screens/SignUpScreen';
-import SignInScreen from './screens/SignInScreen';
-import UserProfileScreen from './screens/UserProfileScreen';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
+
 import user from './reducers/user';
+
+
+import FiltersScreen from './screens/FiltersScreen';
+import SwipesScreen from './screens/SwipesScreen';
+import HomeScreen from './screens/HomeScreen';
+import SignInScreen from './screens/SignInScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import ChatScreen from './screens/ChatScreen';
+import UserProfileScreen from './screens/UserProfileScreen';
 
 
 const store = configureStore({
@@ -26,21 +32,29 @@ const TabNavigator = () => {
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
-        if (route.name === 'SignUp') {
-          iconName = 'location-arrow';
-        } else if (route.name === 'SignIn') {
-          iconName = 'map-pin';
+        if (route.name === 'Swipes') {
+          iconName = 'heart';
+        } else if (route.name === 'Chat') {
+          iconName = 'comments'; 
+        } else if(route.name ==='Profile'){
+          iconName = 'paw'; 
+        }else if(route.name==='Filters'){
+          iconName='sliders';
         }
-
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#ec6e5b',
-      tabBarInactiveTintColor: '#335561',
+      tabBarActiveTintColor: '#F1890F',
+      tabBarInactiveTintColor: '#9c9c9c',
       headerShown: false,
     })}>
-      <Tab.Screen name="SignUp" component={SignUpScreen} />
-      <Tab.Screen name="SignIn" component={SignInScreen} />
-      <Tab.Screen name="UserProfile" component={UserProfileScreen} />
+       <Tab.Screen name="SignUp" component={SignUpScreen} />
+       <Tab.Screen name="SignIn" component={SignInScreen} />
+      <Tab.Screen name="Filters" component={FiltersScreen}/>
+      <Tab.Screen name="Swipes" component={SwipesScreen}/>
+       <Tab.Screen name="Chat" component={ChatScreen} /> 
+       <Tab.Screen name="Profile" component={UserProfileScreen} />
+    
+
     </Tab.Navigator>
   );
 };
