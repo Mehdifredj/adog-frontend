@@ -41,7 +41,7 @@ export default function SignUpScreen({ navigation }) {
           setEmail("");
           setPassword("");
           setMessagealert('');
-          navigation.navigate("UserProfile");
+          navigation.navigate("Profile");
 
         } else if (
           !data.result &&
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   imagePatte: {
     marginTop: "5%",
-    width: "10%",
-    height: "10%",
+    width: 60,
+    height: 60,
   },
 });

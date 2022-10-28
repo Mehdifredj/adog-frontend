@@ -1,5 +1,4 @@
 import React from "react";
-import * as ImagePicker from "expo-image-picker";
 import { useState, useEffect } from "react";
 import {
   Image,
@@ -14,12 +13,14 @@ import {
   ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProfil, login } from "../reducers/user";
+import { updateProfil, addPhoto } from "../reducers/user";
 import SelectList from "react-native-dropdown-select-list";
 import IP_VARIABLE from "../variable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as ImagePicker from "expo-image-picker";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function UserProfilScreen({ navigation }) {
+export default function UserProfileScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
@@ -34,6 +35,7 @@ export default function UserProfilScreen({ navigation }) {
   const [selected, setSelected] = useState("");
   const [data, setData] = useState([]);
 
+  // permet de récupérer la liste des races de chiens via une api publique
   useEffect(() => {
     fetch("https://api.thedogapi.com/v1/breeds/")
       .then((response) => response.json())
@@ -46,7 +48,6 @@ export default function UserProfilScreen({ navigation }) {
   });
 
   // Permet de charger au lancement de la page les informations du profil garder en BDD
-
   useEffect(() => {
     fetch(`http://${IP_VARIABLE}/users/getuser/${user.token}`)
       .then((response) => response.json())
@@ -60,41 +61,6 @@ export default function UserProfilScreen({ navigation }) {
         setAboutMyOwner(data.aboutMyOwner);
       });
   }, []);
-
-  const handleRegister = () => {
-    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: name,
-        breed: breed,
-        age: age,
-        gender: gender,
-        vaccins: vaccins,
-        aboutMe: aboutMe,
-        aboutMyOwner: aboutMyOwner,
-        images: image,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(
-            updateProfil({
-              name: data.name,
-              breed: data.breed,
-              age: data.age,
-              gender: data.gender,
-              vaccins: data.vaccins,
-              aboutMe: data.aboutMe,
-              aboutMyOwner: data.aboutMyOwner,
-              images: data.image,
-            })
-          );
-          navigation.navigate("Filters");
-        }
-      });
-  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -129,8 +95,44 @@ export default function UserProfilScreen({ navigation }) {
     return <Image style={styles.images} key={i} source={{ uri: data }} />;
   });
 
+  // fonction qui permet de submit les informations si modifiées
+  const handleRegister = () => {
+    fetch(`http://172.20.10.4:3000/users/update/${user.token}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        breed: breed,
+        age: age,
+        gender: gender,
+        vaccins: vaccins,
+        aboutMe: aboutMe,
+        aboutMyOwner: aboutMyOwner,
+        images: image,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(
+            updateProfil({
+              name: data.name,
+              breed: data.breed,
+              age: data.age,
+              gender: data.gender,
+              vaccins: data.vaccins,
+              aboutMe: data.aboutMe,
+              aboutMyOwner: data.aboutMyOwner,
+              images: data.image,
+            })
+          );
+          navigation.navigate("Filters");
+        }
+      });
+  };
+
   return (
-    <View style={{ flex: 1 }}>
+
       <ScrollView>
         <KeyboardAvoidingView
           style={styles.container}
@@ -145,7 +147,6 @@ export default function UserProfilScreen({ navigation }) {
           <TextInput
             placeholder="Name"
             onChangeText={(value) => setName(value)}
-            value={name}
             style={styles.input}
           />
 
@@ -160,20 +161,17 @@ export default function UserProfilScreen({ navigation }) {
             keyboardType="numeric"
             placeholder="Age"
             onChangeText={(value) => setAge(value)}
-            value={age}
             style={styles.input}
           />
           <TextInput
             placeholder="Gender"
             onChangeText={(value) => setGender(value)}
-            value={gender}
             style={styles.input}
           />
           <View style={styles.containerToggle}>
             <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
             <Switch
               style={styles.toggle}
-              value={vaccins}
               onValueChange={(value) => setVaccins(value)}
               trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
               ios_backgroundColor="#dcdcdc"
@@ -185,7 +183,6 @@ export default function UserProfilScreen({ navigation }) {
             <TextInput
               placeholder="Please write something here"
               onChangeText={(value) => setAboutMe(value)}
-              value={aboutMe}
               style={styles.about}
               multiline={true}
             />
@@ -194,7 +191,6 @@ export default function UserProfilScreen({ navigation }) {
             <TextInput
               placeholder="Please write something here"
               onChangeText={(value) => setAboutMyOwner(value)}
-              value={aboutMyOwner}
               style={styles.about}
               multiline={true}
             />
@@ -215,7 +211,7 @@ export default function UserProfilScreen({ navigation }) {
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </ScrollView>
-    </View>
+
   );
 }
 

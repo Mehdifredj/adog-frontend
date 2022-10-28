@@ -31,7 +31,7 @@ export default function SignInScreen({ navigation }) {
           dispatch(login({ email: data.email, token: data.token, name: data.name })); // dispatch pour stocker les données dans le reducer
           setEmail("");
           setPassword("");
-          navigation.navigate("UserProfile"); // permet la redirection vers la page userProfile.
+          navigation.navigate("Profile"); // permet la redirection vers la page userProfile.
         }
       });
   };
@@ -58,11 +58,11 @@ export default function SignInScreen({ navigation }) {
         style={styles.input}
       />
 <Text style={styles.messagealert}>{messagealert}</Text>
-      <TouchableOpacity onPress={() => handleConnection()}>
+      <TouchableOpacity onPress={() => handleConnection()} >
         <Text style={styles.titleGo}>Go!</Text>
         <Image
           style={styles.imageButton}
-          source={require("../images/Logo-GO.jpg")}
+          source={require("../images/GO.jpg")}
         />
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -88,8 +88,9 @@ const styles = StyleSheet.create({
     fontSize: "18%",
   },
   imageButton: {
-    width: "20%",
-    height: "20%",
+    width: 100,
+    height: 100,
+    marginTop: "10%",
   },
   titleGo: {
     alignItems: "center",
