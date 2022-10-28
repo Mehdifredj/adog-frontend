@@ -17,6 +17,7 @@ import { updateProfil, addPhoto } from "../reducers/user";
 import SelectList from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import IP_VARIABLE from "../variable";
 
 export default function UserProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ export default function UserProfileScreen({ navigation }) {
   // Permet de charger au lancement de la page les informations du profil garder en BDD
   useEffect(() => {
     fetch(
-      "http://172.20.10.4:3000/users/getuser/ENtRKhVIAUmwlyijllmaAgB3CpNnbPYv"
+      `http://${IP_VARIABLE}/users/getuser/${user.token}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -84,7 +85,7 @@ export default function UserProfileScreen({ navigation }) {
       type: "image/jpeg",
     });
 
-    fetch("http://172.20.10.4:3000/upload", {
+    fetch(`http://${IP_VARIABLE}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -102,7 +103,7 @@ export default function UserProfileScreen({ navigation }) {
 
   // fonction qui permet de submit les informations si modifiées
   const handleRegister = () => {
-    fetch(`http://172.20.10.4:3000/users/update/${user.token}`, {
+    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
