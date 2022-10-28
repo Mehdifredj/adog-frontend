@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   title: {
-    fontSize: 40,
+    fontSize: '40%',
     color: '#F1890F',
     marginTop: 40,
     fontWeight: '800',

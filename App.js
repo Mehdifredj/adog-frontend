@@ -13,7 +13,8 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
 import FilterScreen from './screens/FiltreScreen';
-import MapScreen from './screens/MapScreen';
+
+import SwipesScreen from './screens/SwipesScreen';
 
 const store = configureStore({
   reducer: { user },
@@ -28,7 +29,7 @@ const TabNavigator = () => {
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
-        if (route.name === 'Swipe') {
+        if (route.name === 'Swipes') {
           iconName = 'heart';
         } else if (route.name === 'Chat') {
           iconName = 'comments'; 
@@ -45,11 +46,13 @@ const TabNavigator = () => {
       tabBarInactiveTintColor: '#9c9c9c',
       headerShown: false,
     })}>
-      <Tab.Screen name="Swipe" component={SignUpScreen} />
       <Tab.Screen name="Chat" component={SignInScreen} />
       <Tab.Screen name="My Profile" component={UserProfileScreen}/>
-      <Tab.Screen name="Filters" component={MapScreen}/>
+      <Tab.Screen name="Filters" component={FilterScreen}/>
       <Tab.Screen name="PrefScreen" component={Prefscreen}/>
+      <Tab.Screen name="Swipes" component={SwipesScreen}/>
+    
+
     </Tab.Navigator>
   );
 };

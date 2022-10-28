@@ -57,11 +57,12 @@ export default function UserProfilScreen({ navigation }) {
       });
   }, []);
   const handleRegister = () => {
-    fetch(`http://192.168.10.173:3000/users/update/${user.token}`, {
-      method: "PUT",
+    fetch(`http://192.168.10.172:3000/users/update/${user.token}`, {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: name,
+
+        name : name,
         breed: breed,
         age: age,
         gender: gender,
