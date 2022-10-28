@@ -1,9 +1,15 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Image, KeyboardAvoidingView, Platform,
-  ScrollView,
-  StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { login } from "../reducers/user";
 import IP_VARIABLE from "../variable";
 
@@ -26,9 +32,9 @@ export default function SignUpScreen({ navigation }) {
 
     if (!EMAIL_REGEX.test(email)) {
       setMessagealert("Attention le format de ladresse email est incorrect");
-      return
+      return;
     }
-    fetch(`http://$${IP_VARIABLE}/users/signup`, {
+    fetch(`http://${IP_VARIABLE}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: name, email: email, password: password }),
@@ -40,9 +46,8 @@ export default function SignUpScreen({ navigation }) {
           setName("");
           setEmail("");
           setPassword("");
-          setMessagealert('');
-          navigation.navigate("UserProfile");
-
+          setMessagealert("");
+          navigation.navigate("Profile");
         } else if (
           !data.result &&
           data.message === "This email is already used"
@@ -53,12 +58,10 @@ export default function SignUpScreen({ navigation }) {
   };
 
   return (
-
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-
       <Image style={styles.imageLogo} source={require("../images/logo.jpg")} />
       <Text style={styles.title}>Welcome !</Text>
 
@@ -74,7 +77,7 @@ export default function SignUpScreen({ navigation }) {
         value={email}
         style={styles.input}
       />
-      
+
       <TextInput
         placeholder="password"
         onChangeText={(value) => setPassword(value)}
@@ -83,7 +86,7 @@ export default function SignUpScreen({ navigation }) {
         style={styles.input}
       />
 
-<Text style={styles.messagealert}>{messagealert}</Text>
+      <Text style={styles.messagealert}>{messagealert}</Text>
 
       <TouchableOpacity
         onPress={() => handleRegister()}
@@ -103,7 +106,6 @@ export default function SignUpScreen({ navigation }) {
         />
       </TouchableOpacity>
     </KeyboardAvoidingView>
-
   );
 }
 
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
   },
   imagePatte: {
     marginTop: "5%",
-    width: "10%",
-    height: "10%",
+    width: 60,
+    height: 60,
   },
 });

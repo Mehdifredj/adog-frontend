@@ -16,7 +16,7 @@
     "expo": "^46.0.16",
     "expo-camera": "^12.3.0",
     "expo-image-picker": "~13.3.1",
-    "expo-location": "~14.3.0",
+    "expo-location": "^14.3.0",
     "expo-status-bar": "~1.4.0",
     "express-fileupload": "^1.4.0",
     "install": "^0.13.0",
@@ -29,7 +29,8 @@
     "react-native-screens": "~3.15.0",
     "react-native-svg": "12.3.0",
     "react-redux": "^8.0.4",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "uniqid": "^5.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

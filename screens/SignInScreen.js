@@ -2,16 +2,23 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
-import { Image, KeyboardAvoidingView, Platform,
-  StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
-  import IP_VARIABLE from "../variable";
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import IP_VARIABLE from "../variable";
 
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState(""); //initialisation des etats pour l'email et le passxord
   const [password, setPassword] = useState("");
-  const [messagealert, setMessagealert] = useState('')
+  const [messagealert, setMessagealert] = useState("");
 
   const handleConnection = () => {
     fetch(`http://${IP_VARIABLE}/users/signin`, {
@@ -22,16 +29,18 @@ export default function SignInScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('depuis le front')
+        console.log("depuis le front");
         if (!data.result) {
-          setMessagealert('Désolé vos identifiants sont incorrects')
-          console.log(messagealert)
+          setMessagealert("Désolé vos identifiants sont incorrects");
+          console.log(messagealert);
         }
         if (data.result) {
-          dispatch(login({ email: data.email, token: data.token, name: data.name })); // dispatch pour stocker les données dans le reducer
+          dispatch(
+            login({ email: data.email, token: data.token, name: data.name })
+          ); // dispatch pour stocker les données dans le reducer
           setEmail("");
           setPassword("");
-          navigation.navigate("UserProfile"); // permet la redirection vers la page userProfile.
+          navigation.navigate("Profile"); // permet la redirection vers la page userProfile.
         }
       });
   };
@@ -57,12 +66,12 @@ export default function SignInScreen({ navigation }) {
         value={password}
         style={styles.input}
       />
-<Text style={styles.messagealert}>{messagealert}</Text>
+      <Text style={styles.messagealert}>{messagealert}</Text>
       <TouchableOpacity onPress={() => handleConnection()}>
         <Text style={styles.titleGo}>Go!</Text>
         <Image
           style={styles.imageButton}
-          source={require("../images/Logo-GO.jpg")}
+          source={require("../images/GO.jpg")}
         />
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -88,8 +97,9 @@ const styles = StyleSheet.create({
     fontSize: "18%",
   },
   imageButton: {
-    width: "20%",
-    height: "20%",
+    width: 100,
+    height: 100,
+    marginTop: "10%",
   },
   titleGo: {
     alignItems: "center",
@@ -102,5 +112,5 @@ const styles = StyleSheet.create({
   messagealert: {
     margin: "0.9%",
     color: "red",
-  }
+  },
 });

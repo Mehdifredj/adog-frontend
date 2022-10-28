@@ -1,9 +1,8 @@
 import React from "react";
-import * as ImagePicker from "expo-image-picker";
 import { useState, useEffect } from "react";
 import {
   Image,
-  KeyboardAvoidingView,
+ KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
@@ -12,14 +11,16 @@ import {
   TouchableOpacity,
   Switch,
   ScrollView,
-  FontAwesome
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProfil, login } from "../reducers/user";
+import { updateProfil, addPhoto } from "../reducers/user";
 import SelectList from "react-native-dropdown-select-list";
 import IP_VARIABLE from "../variable";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as ImagePicker from "expo-image-picker";
 
-export default function UserProfilScreen({ navigation }) {
+
+export default function UserProfileScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
 
@@ -34,6 +35,7 @@ export default function UserProfilScreen({ navigation }) {
   const [selected, setSelected] = useState("");
   const [data, setData] = useState([]);
 
+  // permet de récupérer la liste des races de chiens via une api publique
   useEffect(() => {
     fetch("https://api.thedogapi.com/v1/breeds/")
       .then((response) => response.json())
@@ -46,7 +48,6 @@ export default function UserProfilScreen({ navigation }) {
   });
 
   // Permet de charger au lancement de la page les informations du profil garder en BDD
-
   useEffect(() => {
     fetch(`http://${IP_VARIABLE}/users/getuser/${user.token}`)
       .then((response) => response.json())
@@ -60,6 +61,8 @@ export default function UserProfilScreen({ navigation }) {
         setAboutMyOwner(data.aboutMyOwner);
       });
   }, []);
+
+   // fonction qui permet de submit les informations si modifiées
   const handleRegister = () => {
     fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
       method: "POST",
@@ -102,21 +105,16 @@ export default function UserProfilScreen({ navigation }) {
       aspect: [4, 3],
       quality: 1,
     });
-
     // console.log(result.uri);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
-
     const formData = new FormData();
-
     formData.append("imageFromFront", {
       uri: result.uri,
       name: "photo.jpg",
       type: "image/jpeg",
     });
-
     fetch(`http://${IP_VARIABLE}/upload`, {
       method: "POST",
       body: formData,
@@ -133,6 +131,10 @@ export default function UserProfilScreen({ navigation }) {
     return <Image style={styles.images} key={i} source={{ uri: data }} />;
   });
 
+
+
+
+
   return (
     <ScrollView>
       <KeyboardAvoidingView
@@ -148,35 +150,31 @@ export default function UserProfilScreen({ navigation }) {
         <TextInput
           placeholder="Name"
           onChangeText={(value) => setName(value)}
-          value={name}
           style={styles.input}
         />
- 
-        <SelectList 
-          data={data} 
-          setSelected={setSelected} 
+
+        <SelectList
+          data={data}
+          setSelected={setSelected}
           placeholder="Select your Breed"
-          borderColor=''
-          />
+          borderColor=""
+        />
 
         <TextInput
           keyboardType="numeric"
           placeholder="Age"
           onChangeText={(value) => setAge(value)}
-          value={age}
           style={styles.input}
         />
         <TextInput
           placeholder="Gender"
           onChangeText={(value) => setGender(value)}
-          value={gender}
           style={styles.input}
         />
         <View style={styles.containerToggle}>
           <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
           <Switch
             style={styles.toggle}
-            value={vaccins}
             onValueChange={(value) => setVaccins(value)}
             trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
             ios_backgroundColor="#dcdcdc"
@@ -188,7 +186,6 @@ export default function UserProfilScreen({ navigation }) {
           <TextInput
             placeholder="Please write something here"
             onChangeText={(value) => setAboutMe(value)}
-            value={aboutMe}
             style={styles.about}
             multiline={true}
           />
@@ -197,23 +194,22 @@ export default function UserProfilScreen({ navigation }) {
           <TextInput
             placeholder="Please write something here"
             onChangeText={(value) => setAboutMyOwner(value)}
-            value={aboutMyOwner}
             style={styles.about}
             multiline={true}
           />
         </View>
 
         <TouchableOpacity style={styles.pick} onPress={pickImage}>
-          <Text>
-            Pick an image from camera roll <FontAwesome name={"image"} />
-          </Text>
+          <Text>Pick an image from camera roll</Text>
+          <FontAwesome name={"image"} />
         </TouchableOpacity>
         <View style={styles.gallery}>{gallery}</View>
 
         <TouchableOpacity
           style={styles.buttonSubmit}
           activeOpacity={0.8}
-          onPress={() => handleRegister()}>
+          onPress={() => handleRegister()}
+        >
           <Text style={styles.textButton}>Submit</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -287,6 +283,7 @@ const styles = StyleSheet.create({
   pick: {
     marginTop: "8%",
     color: "#F1890F",
+    flexDirection: "row",
   },
   gallery: {
     flex: 1,
