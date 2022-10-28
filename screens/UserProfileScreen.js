@@ -14,28 +14,56 @@ import {
   ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProfil, addPhoto } from "../reducers/user";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { updateProfil, login } from "../reducers/user";
+import SelectList from "react-native-dropdown-select-list";
 
-export default function UserProfileScreen({ navigation }) {
+export default function UserProfilScreen({ navigation }) {
   const dispatch = useDispatch();
-  // const user = useSelector((state) => state.user.value.email);
+  const user = useSelector((state) => state.user.value);
 
   const [name, setName] = useState("");
   const [breed, setBreed] = useState("");
-  const [age, setAge] = useState(0);
+  const [age, setAge] = useState(null);
   const [gender, setGender] = useState("");
   const [vaccins, setVaccins] = useState(false);
   const [aboutMe, setAboutMe] = useState("");
   const [aboutMyOwner, setAboutMyOwner] = useState("");
   const [image, setImage] = useState(null);
+  const [selected, setSelected] = useState("");
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+    fetch("https://api.thedogapi.com/v1/breeds/")
+      .then((response) => response.json())
+      .then((data) => {
+        const resultMap = data.map((dataResult, i) => {
+          return dataResult.name;
+        });
+        setData(resultMap);
+      });
+  });
+
+  // Permet de charger au lancement de la page les informations du profil garder en BDD
+
+  useEffect(() => {
+    fetch(`http://192.168.10.173:3000/users/getuser/${user.token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setName(data.name);
+        setBreed(data.breed);
+        setAge(data.age.toString());
+        setGender(data.gender);
+        setVaccins(data.vaccins);
+        setAboutMe(data.aboutMe);
+        setAboutMyOwner(data.aboutMyOwner);
+      });
+  }, []);
   const handleRegister = () => {
-    fetch("http://172.20.10.4:3000/users/update", {
+    fetch(`http://192.168.10.172:3000/users/update/${user.token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: name,
+        name : name,
         breed: breed,
         age: age,
         gender: gender,
@@ -47,21 +75,20 @@ export default function UserProfileScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.result) {
           dispatch(
             updateProfil({
-              name: name,
-              breed: breed,
-              age: age,
-              gender: gender,
-              vaccins: vaccins,
-              aboutMe: aboutMe,
-              aboutMyOwner: aboutMyOwner,
-              images: image,
+              name: data.name,
+              breed: data.breed,
+              age: data.age,
+              gender: data.gender,
+              vaccins: data.vaccins,
+              aboutMe: data.aboutMe,
+              aboutMyOwner: data.aboutMyOwner,
+              images: data.image,
             })
           );
-          navigation.navigate("SignIn");
+          navigation.navigate("Filters");
         }
       });
   };
@@ -117,25 +144,28 @@ export default function UserProfileScreen({ navigation }) {
         <Text style={styles.title}>Hi ! I'm ...</Text>
 
         <TextInput
-          placeholder="name"
+          placeholder="Name"
           onChangeText={(value) => setName(value)}
           value={name}
           style={styles.input}
         />
+ 
+        <SelectList 
+          data={data} 
+          setSelected={setSelected} 
+          placeholder="Select your Breed"
+          borderColor=''
+          />
+
         <TextInput
-          placeholder="breed"
-          onChangeText={(value) => setBreed(value)}
-          value={breed}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="age"
+          keyboardType="numeric"
+          placeholder="Age"
           onChangeText={(value) => setAge(value)}
           value={age}
           style={styles.input}
         />
         <TextInput
-          placeholder="gender"
+          placeholder="Gender"
           onChangeText={(value) => setGender(value)}
           value={gender}
           style={styles.input}

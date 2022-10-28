@@ -8,9 +8,13 @@ import HomeScreen from './screens/HomeScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import SignInScreen from './screens/SignInScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
+import Prefscreen from './screens/Prefscreen';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
+import FilterScreen from './screens/FiltreScreen';
+
+import SwipesScreen from './screens/SwipesScreen';
 
 
 const store = configureStore({
@@ -26,21 +30,30 @@ const TabNavigator = () => {
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
-        if (route.name === 'SignUp') {
-          iconName = 'location-arrow';
-        } else if (route.name === 'SignIn') {
-          iconName = 'map-pin';
+        if (route.name === 'Swipes') {
+          iconName = 'heart';
+        } else if (route.name === 'Chat') {
+          iconName = 'comments'; 
+        } else if(route.name ==='My Profile'){
+          iconName = 'paw'; 
+        }else if(route.name==='Filters'){
+          iconName='sliders';
         }
+
 
         return <FontAwesome name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: '#ec6e5b',
-      tabBarInactiveTintColor: '#335561',
+      tabBarActiveTintColor: '#F1890F',
+      tabBarInactiveTintColor: '#9c9c9c',
       headerShown: false,
     })}>
-      <Tab.Screen name="SignUp" component={SignUpScreen} />
-      <Tab.Screen name="SignIn" component={SignInScreen} />
-      <Tab.Screen name="UserProfile" component={UserProfileScreen} />
+      <Tab.Screen name="Chat" component={SignInScreen} />
+      <Tab.Screen name="My Profile" component={UserProfileScreen}/>
+      <Tab.Screen name="Filters" component={FilterScreen}/>
+      <Tab.Screen name="PrefScreen" component={Prefscreen}/>
+      <Tab.Screen name="Swipes" component={SwipesScreen}/>
+    
+
     </Tab.Navigator>
   );
 };
