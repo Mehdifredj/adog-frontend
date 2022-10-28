@@ -2,20 +2,18 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
-import {
-    Image, KeyboardAvoidingView, Platform,
-    StyleSheet, Text, View, ImageBackground,
-    TextInput, TouchableOpacity} from "react-native";
-
+import { Image, KeyboardAvoidingView, Platform,
+  StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState(""); //initialisation des etats pour l'email et le passxord
   const [password, setPassword] = useState("");
+  const [messagealert, setMessagealert] = useState('')
 
   const handleConnection = () => {
-    fetch("http://192.168.10.166:3000/users/signin", {
+    fetch("http://172.20.10.4:3000/users/signin", {
       // requete fetch avec notre adresse IP personnelle sur la route POST signin
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -23,8 +21,13 @@ export default function SignInScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log('depuis le front')
+        if (!data.result) {
+          setMessagealert('Désolé vos identifiants sont incorrects')
+          console.log(messagealert)
+        }
         if (data.result) {
-          dispatch(login({ email: email })); // dispatch pour stocker les données dans le reducer
+          dispatch(login({ email: data.email, token: data.token, name: data.name })); // dispatch pour stocker les données dans le reducer
           setEmail("");
           setPassword("");
           navigation.navigate("UserProfile"); // permet la redirection vers la page userProfile.
@@ -44,7 +47,6 @@ export default function SignInScreen({ navigation }) {
         onChangeText={(value) => setEmail(value)}
         value={email}
         style={styles.input}
-        
       />
 
       <TextInput
@@ -54,11 +56,11 @@ export default function SignInScreen({ navigation }) {
         value={password}
         style={styles.input}
       />
-
+<Text style={styles.messagealert}>{messagealert}</Text>
       <TouchableOpacity onPress={() => handleConnection()}>
-        <Text style={styles.titleLogoGO}>Go!</Text>
+        <Text style={styles.titleGo}>Go!</Text>
         <Image
-          style={styles.imagestyleLogoGo}
+          style={styles.imageButton}
           source={require("../images/Logo-GO.jpg")}
         />
       </TouchableOpacity>
@@ -73,34 +75,31 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "white",
   },
-
   imageLogo: {
-    width: 300,
-    height: 300,
-    borderRadius: 10,
+    width: "60%",
+    height: "25%",
   },
-
   input: {
     width: "80%",
-    marginTop: 25,
+    marginTop: "8%",
     borderBottomColor: "#F1890F",
     borderBottomWidth: 1,
-    fontSize: 18,
+    fontSize: "18%",
   },
-
-
-  imagestyleLogoGo: {
-    height: 150,
-    width: 150,
+  imageButton: {
+    width: "20%",
+    height: "20%",
   },
-
-  titleLogoGO: {
+  titleGo: {
     alignItems: "center",
     justifyContent: "center",
     color: "#F1890F",
-    fontSize: 20,
+    fontSize: "20%",
     fontWeight: "600",
-    marginLeft: 65,
-    marginTop: 120,
+    marginTop: "20%",
   },
+  messagealert: {
+    margin: "0.9%",
+    color: "red",
+  }
 });
