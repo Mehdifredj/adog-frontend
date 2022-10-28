@@ -29,11 +29,10 @@ export default function UserProfilScreen({navigation}) {
   const [aboutMyOwner, setAboutMyOwner] = useState("");
 
   const handleRegister = () => {
-    fetch(`http://192.168.10.172:3000/users/update/${user.token}`, {
+    fetch(`http:///192.168.10.121:3000/users/update/${user.token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-
         name : name,
         breed: breed,
         age: age,

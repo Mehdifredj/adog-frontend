@@ -20,18 +20,18 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
   };
 
   const handleRegister = () => {
-    fetch('http://192.168.10.203:3000/users/signup', {
+    fetch('http://192.168.10.121:3000/users/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name, email: email, password: password }),
     }).then(response => response.json())
       .then(data => {
         if (data.result && EMAIL_REGEX.test(email)){
-          dispatch(login({ email: email }));
+          dispatch(login({ email: email })); 
           setName('');
           setEmail('');
           setPassword('');
-          navigation.navigate('UserProfile');
+          navigation.navigate('My Profile');
         } else {
           setEmailError(true);
         }
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   title: {
-    fontSize: 40,
+    fontSize: '40%',
     color: '#F1890F',
     marginTop: 40,
     fontWeight: '800',
