@@ -9,31 +9,32 @@ export default function SignUpScreen({navigation}) {
 const dispatch = useDispatch();
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    
+//const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[az])(?=.*[AZ])(?=.*[@#$%^&-+=() ])(?=\\S+$).{8, 20}$/;
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
-
+  //const [passwordError, setPasswordError] = useState("");
   const goSignIn = () => {
     navigation.navigate('Chat');
   };
 
   const handleRegister = () => {
-    fetch('http://192.168.2.102:3000/users/signup', {
+    fetch('http://192.168.10.173:3000/users/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name, email: email, password: password }),
     }).then(response => response.json())
       .then(data => {
         if (data.result && EMAIL_REGEX.test(email)){
-          dispatch(login({ email: email, token: data.token, name : data.name }));
+          dispatch(login({ email: email, token: data.token, name : data.name}));
           setName('');
           setEmail('');
           setPassword('');
           navigation.navigate('My Profile');
         } else {
           setEmailError(true);
+         // setPasswordError(true);
         }
       });
   };
@@ -64,7 +65,6 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
         secureTextEntry={true}
         value={password}
         style={styles.input}/>
-   
   
       <TouchableOpacity
         onPress={() => handleRegister()}

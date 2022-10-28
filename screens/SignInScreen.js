@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../reducers/user";
+import { login, updateProfil } from "../reducers/user";
 import {
   Image,
   KeyboardAvoidingView,
@@ -21,21 +21,28 @@ export default function SignInScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleConnection = () => {
-    fetch("http://192.168.2.102:3000/users/signin", {
-      // requete fetch avec notre adresse IP personnelle sur la route POST signin
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email, password: password }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(login({ email: data.email, token: data.token, name: data.name })); // dispatch pour stocker les données dans le reducer
-          setEmail("");
-          setPassword("");
-          navigation.navigate("Filters"); // permet la redirection vers la page userProfile.
-        }
-      });
+    try {
+      fetch("http://192.168.10.173:3000/users/signin", {
+        // requete fetch avec notre adresse IP personnelle sur la route POST signin
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, password: password }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            dispatch(
+              login({ email: data.email, token: data.token, name: data.name })
+            ); // dispatch pour stocker les données dans le reducer
+            setEmail("");
+            setPassword("");
+            navigation.navigate("Filters"); // permet la redirection vers la page userProfile.
+          }
+        })
+        .catch((error) => console.log(error));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -50,7 +57,6 @@ export default function SignInScreen({ navigation }) {
         onChangeText={(value) => setEmail(value)}
         value={email}
         style={styles.input}
-        
       />
 
       <TextInput
