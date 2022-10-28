@@ -27,7 +27,7 @@ export default function SignUpScreen({ navigation }) {
       setMessagealert("Attention le format de ladresse email est incorrect");
       return
     }
-    fetch("http://172.20.10.4:3000/users/signup", {
+    fetch("http://192.168.10.173:3000/users/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: name, email: email, password: password }),
