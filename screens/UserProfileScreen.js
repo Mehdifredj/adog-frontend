@@ -18,7 +18,7 @@ import SelectList from "react-native-dropdown-select-list";
 import IP_VARIABLE from "../variable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 
 export default function UserProfileScreen({ navigation }) {
   const dispatch = useDispatch();
