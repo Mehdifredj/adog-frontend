@@ -115,7 +115,7 @@ export default function UserProfileScreen({ navigation }) {
       name: "photo.jpg",
       type: "image/jpeg",
     });
-    fetch(`http://${IP_VARIABLE}/upload`, {
+    fetch(`http://${IP_VARIABLE}/users/upload`, {
       method: "POST",
       body: formData,
     })
