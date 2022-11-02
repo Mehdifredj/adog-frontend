@@ -10,9 +10,9 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
+      state.value.name = action.payload.name;
       state.value.email = action.payload.email;
       state.value.token = action.payload.token;
-      state.value.name = action.payload.name;
     },
     updateProfil: (state, action) => {
       state.value.name = action.payload.name;
@@ -22,14 +22,25 @@ export const userSlice = createSlice({
       state.value.vaccins = action.payload.vaccins;
       state.value.aboutMe = action.payload.aboutMe;
       state.value.aboutMyOwner = action.payload.aboutMyOwner;
-      state.value.images = action.payload.images;
+      state.value.images.push(action.payload.images);
     },
     addPhoto: (state, action) => {
       state.value.images.push(action.payload);
-      console.log(state.value.images);
+     // console.log(state.value.images);
     },
+    addRoom: (state, action) => {
+      console.log("action",action.payload);
+      state.value.room = action.payload;
+    },
+    addOtherUserName: (state, action) => {
+      console.log("action",action.payload);
+      state.value.otherusername = action.payload;
+    },
+    deleteRoom: (state) => {
+      state.value.room = null
+    }
 }
 })
 
-export const { login, updateProfil, addPhoto } = userSlice.actions;
+export const { login, updateProfil, addPhoto, addRoom, addOtherUserName, deleteRoom } = userSlice.actions;
 export default userSlice.reducer;

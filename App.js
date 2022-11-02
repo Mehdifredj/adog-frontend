@@ -15,7 +15,9 @@ import HomeScreen from "./screens/HomeScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import ChatScreen from "./screens/ChatScreen";
+import MatchScreen from "./screens/MatchScreen";
 import UserProfileScreen from "./screens/UserProfileScreen";
+import MessagerieScreen from "./screens/MessagerieScreen";
 
 const store = configureStore({
   reducer: { user },
@@ -51,8 +53,10 @@ const TabNavigator = () => {
       <Tab.Screen name="SignIn" component={SignInScreen} />
       <Tab.Screen name="Filters" component={FiltersScreen} />
       <Tab.Screen name="Swipes" component={SwipesScreen} />
-      <Tab.Screen name="Chat" component={ChatScreen} />
       <Tab.Screen name="Profile" component={UserProfileScreen} />
+      <Tab.Screen name="Match" component={MatchScreen} />
+      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen name="Messagerie" component={MessagerieScreen} />
     </Tab.Navigator>
   );
 };
@@ -64,6 +68,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="Messagerie" component={MessagerieScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -29,7 +29,6 @@ export default function SignInScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("depuis le front");
         if (!data.result) {
           setMessagealert("Désolé vos identifiants sont incorrects");
           console.log(messagealert);
@@ -67,13 +66,16 @@ export default function SignInScreen({ navigation }) {
         style={styles.input}
       />
       <Text style={styles.messagealert}>{messagealert}</Text>
-      <TouchableOpacity onPress={() => handleConnection()}>
+
+      <TouchableOpacity onPress={() => handleConnection()} style={styles.go}>
         <Text style={styles.titleGo}>Go!</Text>
         <Image
           style={styles.imageButton}
           source={require("../images/GO.jpg")}
         />
       </TouchableOpacity>
+
+
     </KeyboardAvoidingView>
   );
 }
@@ -99,15 +101,17 @@ const styles = StyleSheet.create({
   imageButton: {
     width: 100,
     height: 100,
-    marginTop: "10%",
+    marginTop: "3%",
   },
-  titleGo: {
+  go: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  titleGo: {
     color: "#F1890F",
     fontSize: "20%",
     fontWeight: "600",
-    marginTop: "20%",
+    marginTop: "10%",
   },
   messagealert: {
     margin: "0.9%",

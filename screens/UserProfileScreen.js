@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import {
   Image,
- KeyboardAvoidingView,
+  KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
@@ -14,89 +14,57 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfil, addPhoto } from "../reducers/user";
-import SelectList from "react-native-dropdown-select-list";
 import IP_VARIABLE from "../variable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
-
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function UserProfileScreen({ navigation }) {
   const dispatch = useDispatch();
+
   const user = useSelector((state) => state.user.value);
 
   const [name, setName] = useState("");
   const [breed, setBreed] = useState("");
   const [age, setAge] = useState(null);
   const [gender, setGender] = useState("");
+  const [city, setCity] = useState("");
   const [vaccins, setVaccins] = useState(false);
   const [aboutMe, setAboutMe] = useState("");
   const [aboutMyOwner, setAboutMyOwner] = useState("");
+
   const [image, setImage] = useState(null);
-  const [selected, setSelected] = useState("");
-  const [data, setData] = useState([]);
+  const [imageCloud, setImageCloud] = useState([]);
 
   // permet de récupérer la liste des races de chiens via une api publique
-  useEffect(() => {
-    fetch("https://api.thedogapi.com/v1/breeds/")
-      .then((response) => response.json())
-      .then((data) => {
-        const resultMap = data.map((dataResult, i) => {
-          return dataResult.name;
-        });
-        setData(resultMap);
-      });
-  });
+  // useEffect(() => {
+  //   fetch("https://api.thedogapi.com/v1/breeds/")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       const resultMap = data.map((dataResult, i) => {
+  //         return dataResult.name;
+  //       });
+  //       setData(resultMap);
+  //     });
+  // });
 
-  // Permet de charger au lancement de la page les informations du profil garder en BDDD
+  // permet de charger au lancement de la page les informations du profil garder en BDD
   useEffect(() => {
     fetch(`http://${IP_VARIABLE}/users/getuser/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log("data récupérées du get", data);
         setName(data.name);
         setBreed(data.breed);
         setAge(data.age.toString());
         setGender(data.gender);
+        setCity(data.city);
         setVaccins(data.vaccins);
         setAboutMe(data.aboutMe);
         setAboutMyOwner(data.aboutMyOwner);
+        data.images.map((value) => dispatch(updateProfil({ images: value })));
       });
   }, []);
-
-   // fonction qui permet de submit les informations si modifiées
-  const handleRegister = () => {
-    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name : name,
-        breed: breed,
-        age: age,
-        gender: gender,
-        vaccins: vaccins,
-        aboutMe: aboutMe,
-        aboutMyOwner: aboutMyOwner,
-        images: image,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          dispatch(
-            updateProfil({
-              name: data.name,
-              breed: data.breed,
-              age: data.age,
-              gender: data.gender,
-              vaccins: data.vaccins,
-              aboutMe: data.aboutMe,
-              aboutMyOwner: data.aboutMyOwner,
-              images: data.image,
-            })
-          );
-          navigation.navigate("Filters");
-        }
-      });
-  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -105,7 +73,7 @@ export default function UserProfileScreen({ navigation }) {
       aspect: [4, 3],
       quality: 1,
     });
-    // console.log(result.uri);
+
     if (!result.cancelled) {
       setImage(result.uri);
     }
@@ -121,6 +89,7 @@ export default function UserProfileScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        setImageCloud([...imageCloud, data.url]);
         data.result && dispatch(addPhoto(data.url));
       });
   };
@@ -131,9 +100,43 @@ export default function UserProfileScreen({ navigation }) {
     return <Image style={styles.images} key={i} source={{ uri: data }} />;
   });
 
-
-
-
+  // fonction qui permet de submit les informations pour les enregistrer en BDD
+  const handleRegister = () => {
+    fetch(`http://${IP_VARIABLE}/users/update/${user.token}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        breed: breed,
+        age: age,
+        city: city,
+        gender: gender,
+        vaccins: vaccins,
+        aboutMe: aboutMe,
+        aboutMyOwner: aboutMyOwner,
+        images: imageCloud,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          dispatch(
+            updateProfil({
+              name: data.name,
+              breed: data.breed,
+              age: data.age,
+              city: data.city,
+              gender: data.gender,
+              vaccins: data.vaccins,
+              aboutMe: data.aboutMe,
+              aboutMyOwner: data.aboutMyOwner,
+              images: data.images,
+            })
+          );
+        }
+      });
+    navigation.navigate("Swipes");
+  };
 
   return (
     <ScrollView>
@@ -151,13 +154,7 @@ export default function UserProfileScreen({ navigation }) {
           placeholder="Name"
           onChangeText={(value) => setName(value)}
           style={styles.input}
-        />
-
-        <SelectList
-          data={data}
-          setSelected={setSelected}
-          placeholder="Select your Breed"
-          borderColor=""
+          value={name}
         />
 
         <TextInput
@@ -165,12 +162,37 @@ export default function UserProfileScreen({ navigation }) {
           placeholder="Age"
           onChangeText={(value) => setAge(value)}
           style={styles.input}
+          value={age}
         />
+
+        {/* <SelectList
+              data={data}
+              setSelected={setSelected}
+              placeholder="Select your breed"
+              value={breed}
+            /> */}
+
+        <TextInput
+          placeholder="Breed"
+          onChangeText={(value) => setBreed(value)}
+          style={styles.input}
+          value={breed}
+        />
+
         <TextInput
           placeholder="Gender"
           onChangeText={(value) => setGender(value)}
           style={styles.input}
+          value={gender}
         />
+
+        <TextInput
+          placeholder="City"
+          onChangeText={(value) => setCity(value)}
+          style={styles.input}
+          value={city}
+        />
+
         <View style={styles.containerToggle}>
           <Text style={styles.textToggle}>Up-to-date vaccinations</Text>
           <Switch
@@ -178,6 +200,7 @@ export default function UserProfileScreen({ navigation }) {
             onValueChange={(value) => setVaccins(value)}
             trackColor={{ false: "#dcdcdc", true: "#F1890F" }}
             ios_backgroundColor="#dcdcdc"
+            value={vaccins}
           />
         </View>
 
@@ -188,6 +211,7 @@ export default function UserProfileScreen({ navigation }) {
             onChangeText={(value) => setAboutMe(value)}
             style={styles.about}
             multiline={true}
+            value={aboutMe}
           />
 
           <Text style={styles.titleAbout}>About my owner :</Text>
@@ -196,21 +220,26 @@ export default function UserProfileScreen({ navigation }) {
             onChangeText={(value) => setAboutMyOwner(value)}
             style={styles.about}
             multiline={true}
+            value={aboutMyOwner}
           />
         </View>
 
-        <TouchableOpacity style={styles.pick} onPress={pickImage}>
-          <Text>Pick an image from camera roll</Text>
-          <FontAwesome name={"image"} />
+        <TouchableOpacity onPress={pickImage}>
+          <LinearGradient colors={["#F1890F", "#DFA35D"]} style={styles.pick}>
+            <Text style={styles.pickText}>Pick an image from camera roll </Text>
+            <FontAwesome style={styles.pickIcone} name={"image"} />
+          </LinearGradient>
         </TouchableOpacity>
+
         <View style={styles.gallery}>{gallery}</View>
 
-        <TouchableOpacity
-          style={styles.buttonSubmit}
-          activeOpacity={0.8}
-          onPress={() => handleRegister()}
-        >
-          <Text style={styles.textButton}>Submit</Text>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => handleRegister()}>
+          <LinearGradient
+            colors={["#DFA35D", "#F1890F"]}
+            style={styles.buttonSubmit}
+          >
+            <Text style={styles.textButton}>Submit</Text>
+          </LinearGradient>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </ScrollView>
@@ -240,8 +269,8 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
   imageUser: {
-    width: "35%",
-    height: "15%",
+    width: 200,
+    height: 150,
     marginTop: "8%",
     borderRadius: "100%",
   },
@@ -282,8 +311,17 @@ const styles = StyleSheet.create({
   },
   pick: {
     marginTop: "8%",
-    color: "#F1890F",
     flexDirection: "row",
+    padding: 10,
+    borderRadius: "8%",
+  },
+  pickText: {
+    color: "#ffffff",
+    fontWeight: "700",
+  },
+  pickIcone: {
+    color: "#ffffff",
+    fontSize: "18%",
   },
   gallery: {
     flex: 1,
@@ -302,10 +340,9 @@ const styles = StyleSheet.create({
   buttonSubmit: {
     alignItems: "center",
     paddingTop: "3%",
-    paddingBottom: "3%", 
-    width: "50%",
-    marginTop: "8%",
-    backgroundColor: "#F1890F",
+    paddingBottom: "3%",
+    width: 120,
+    marginTop: "3%",
     borderRadius: "8%",
     marginBottom: "10%",
   },

@@ -101,7 +101,7 @@ export default function SignUpScreen({ navigation }) {
 
       <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
         <Image
-          source={require("../images/patte.jpg")}
+          source={require("../images/patte.png")}
           style={styles.imagePatte}
         />
       </TouchableOpacity>
