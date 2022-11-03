@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProfil, addPhoto } from "../reducers/user";
+import { updateProfil, addPhoto,logout } from "../reducers/user";
 import IP_VARIABLE from "../variable";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
@@ -24,17 +24,21 @@ export default function UserProfileScreen({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
 
-  const [name, setName] = useState("");
-  const [breed, setBreed] = useState("");
+  const [name, setName] = useState(user.name ? user.name : "");
+  const [breed, setBreed] = useState(user.breed ? user.breed : "");
   const [age, setAge] = useState(null);
-  const [gender, setGender] = useState("");
-  const [city, setCity] = useState("");
-  const [vaccins, setVaccins] = useState(false);
-  const [aboutMe, setAboutMe] = useState("");
-  const [aboutMyOwner, setAboutMyOwner] = useState("");
+  const [gender, setGender] = useState(user.gender ? user.gender : "");
+  const [city, setCity] = useState(user.city ? user.city : "");
+  const [vaccins, setVaccins] = useState(user.vaccins ? user.vaccins : false);
+  const [aboutMe, setAboutMe] = useState(user.aboutMe ? user.aboutMe : "");
+  const [aboutMyOwner, setAboutMyOwner] = useState(
+    user.aboutMyOwner ? user.aboutMyOwner : ""
+  );
 
-  const [image, setImage] = useState(null);
-  const [imageCloud, setImageCloud] = useState([]);
+  const [image, setImage] = useState(user.image ? user.image : null);
+  const [imageCloud, setImageCloud] = useState(
+    user.imageCloud ? user.imageCloud : []
+  );
 
   // permet de récupérer la liste des races de chiens via une api publique
   // useEffect(() => {
@@ -62,7 +66,7 @@ export default function UserProfileScreen({ navigation }) {
         setVaccins(data.vaccins);
         setAboutMe(data.aboutMe);
         setAboutMyOwner(data.aboutMyOwner);
-        data.images.map((value) => dispatch(updateProfil({ images: value })));
+        // data.images.map((value) => dispatch(updateProfil({ images: value })));
       });
   }, []);
 
@@ -135,8 +139,13 @@ export default function UserProfileScreen({ navigation }) {
           );
         }
       });
-    navigation.navigate("Swipes");
+      navigation.navigate("TabNavigator", { screen: 'Swipes' });
   };
+
+  const handleLogout = () => {
+    dispatch(logout())
+    navigation.navigate('Home')
+  }
 
   return (
     <ScrollView>
@@ -146,7 +155,7 @@ export default function UserProfileScreen({ navigation }) {
       >
         <Image
           style={styles.imageUser}
-          source={require("../images/user_default.png")}
+          source={require("../images/user_default1.png")}
         />
         <Text style={styles.title}>Hi ! I'm ...</Text>
 
@@ -241,6 +250,14 @@ export default function UserProfileScreen({ navigation }) {
             <Text style={styles.textButton}>Submit</Text>
           </LinearGradient>
         </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => handleLogout()}>
+          <LinearGradient
+            colors={["#DFA35D", "#F1890F"]}
+            style={styles.buttonSubmit}
+          >
+            <Text style={styles.textButton}>Déconnexion</Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
     </ScrollView>
   );
@@ -269,10 +286,9 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
   imageUser: {
-    width: 200,
-    height: 150,
-    marginTop: "8%",
-    borderRadius: "100%",
+    width: "35%",
+    borderRadius: "50%",
+    resizeMode: "horizontal",
   },
   containerToggle: {
     paddingLeft: "20%",

@@ -17,7 +17,7 @@ export default function MatchScreen({navigation}) {
      />
      <TouchableOpacity onPress={() => navigation.navigate("Messagerie")}>
         <Image
-          source={require("../images/patteblanche.png")}
+          source={require("../images/patte-orange.png")}
           style={styles.imagePatte}
         />
       </TouchableOpacity>
@@ -28,7 +28,7 @@ export default function MatchScreen({navigation}) {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "#F1890F",
+      backgroundColor: "white",
     },
 
     containerview:{
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     match : {
         position: "absolute",
         top:"35%",
-        color:"white",
+        color:"#F1890F",
         fontSize:'50%',
         marginLeft:'10%',
        
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     gif:{
         height:200,
         width:250,
-        marginLeft:"%",
+        marginLeft:"20%",
         marginBottom:"20%",
     },
     

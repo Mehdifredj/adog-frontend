@@ -1,22 +1,19 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { addOtherUserName, addRoom } from "../reducers/user";
 import { useDispatch } from "react-redux";
 
-
 export default function Room(props) {
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  console.log('props', props);
-
+  console.log("props", props);
 
   const handleGoRoom = () => {
-      dispatch(addRoom(props.idRoom)); // dispatch pour stocker les données dans le reducer
-      dispatch(addOtherUserName(props.name))
-        navigation.navigate("Chat");
+    dispatch(addRoom(props.idRoom)); // dispatch pour stocker les données dans le reducer
+    dispatch(addOtherUserName(props.name));
+    navigation.navigate("Chat");
   };
 
   return (
@@ -24,33 +21,35 @@ export default function Room(props) {
       <TouchableOpacity
         onPress={() => handleGoRoom()}
         activeOpacity={0.1}
-        style={styles.message}
+        style={styles.messageCard}
       >
-        <View style={styles.photo}></View>
-        <View style={styles.lastmessage}>
-          <Text style={styles.namelastmessage}>{props.name}</Text>
+        <Image
+          style={styles.photo}
+          source={require("../images/user_default1.png")}
+        />
 
-          <Text>J'aime beaucoup ton chien 🐶</Text>
+        <View style={styles.textCard}>
+          <Text style={styles.name}>{props.name}</Text>
+          <Text style={styles.content}>
+            Trop mignon ton chien ! On pourrait prévoir une rencontre ? 🐶
+          </Text>
         </View>
-        <TouchableOpacity>
-          <Text style={styles.delete}>X</Text>
-        </TouchableOpacity>
       </TouchableOpacity>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  message: {
+  messageCard: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 40,
+    borderRadius: 20,
     marginTop: "5%",
     borderWidth: 1,
-    borderColor: "orange",
-    height: 100,
-    width: "90%",
+    borderColor: "#F1890F",
+    height: 120,
+    width: "95%",
   },
   photo: {
     marginLeft: "5%",
@@ -59,17 +58,19 @@ const styles = StyleSheet.create({
     borderRadius: 300 / 2,
     borderWidth: 1,
   },
-  lastmessage: {
+  textCard: {
     margin: "5%",
     height: "70%",
-    width: "55%",
+    width: "65%",
     display: "flex",
   },
-  namelastmessage: {
-    color: "blue",
+  name: {
+    color: "#F1890F",
     fontWeight: "bold",
   },
-  delete: {
-    color: "red",
+  content: {
+    marginTop: "5%",
+    marginBottom: "7%",
+    color: "black",
   },
 });

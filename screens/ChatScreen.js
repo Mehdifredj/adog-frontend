@@ -1,9 +1,10 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Pusher from "pusher-js/react-native";
 import {
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,23 +17,19 @@ import { useDispatch, useSelector } from "react-redux";
 import IP_VARIABLE from "../variable";
 import { deleteRoom } from "../reducers/user";
 
-const pusher = new Pusher("9f99e2de0211a1e7849d", { cluster: "eu" });
-
 const ChatScreen = ({ navigation }) => {
   /* Information écrite pour le moment en dure, mais par la suite elle seront stocké dans le store
      lorsque l'on cliquera sur la conversation depuis la page précédente */
-
+  const refView = useRef(null);
   const dispatch = useDispatch();
 
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
 
   const user = useSelector((state) => state.user.value);
+  console.log("USERRRRRRR =>", user);
   const idRoom = user.room; //id room
   const token = user.token; //token
-
-  console.log('idRoom au moment du clic',idRoom);
-  console.log('token',token);
 
   const messagesComponents = messages.map((message, i) => {
     return (
@@ -41,7 +38,7 @@ const ChatScreen = ({ navigation }) => {
         style={[
           styles.messageWrapper,
           {
-            ...(message.name.name === user.userName
+            ...(message?.name.name === user.name
               ? styles.messageSent
               : styles.messageRecieved),
           },
@@ -51,7 +48,7 @@ const ChatScreen = ({ navigation }) => {
           style={[
             styles.message,
             {
-              ...(message.name.name === user.userName
+              ...(message?.name.name === user.name
                 ? styles.messageSentBg
                 : styles.messageRecievedBg), //background
             },
@@ -67,28 +64,26 @@ const ChatScreen = ({ navigation }) => {
     );
   });
 
-  const handleReceiveMessage = (data) => {
-    // console.log("message pusher received!", data);
-    if (idRoom === data.roomId) {
-      setMessages((messages) => [...messages, data]);
-    }
-  };
-
   useEffect(() => {
+    
     fetch(`http://${IP_VARIABLE}/messages/sync/${idRoom}`)
       .then((response) => response.json())
       .then((data) => {
         setMessages(data.messages);
-      });
-    const subscription = pusher.subscribe("messagechannel");
-    subscription.bind("pusher:subscription_succeeded", () => {
-      subscription.bind("inserted", handleReceiveMessage);
-    });
+      }, []);
+  });
 
-    return () => {
-      pusher.unsubscribe();
-      pusher.unbind();
-    };
+  useEffect(() => {
+    setInterval(() => {
+      fetch(`http://${IP_VARIABLE}/messages/sync/${idRoom}`)
+        .then((response) => response.json())
+        .then((data) => {
+        
+          setMessages(data.messages);
+        });
+    }, 4000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleLeave = () => {
@@ -97,6 +92,11 @@ const ChatScreen = ({ navigation }) => {
   };
 
   const handleSendMessage = () => {
+    console.log("scfooool", refView.current);
+    setMessages([
+      ...messages,
+      { name: { name: user.name }, content: messageText },
+    ]);
     if (!messageText) {
       return;
     }
@@ -111,15 +111,21 @@ const ChatScreen = ({ navigation }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // setMessages((messages) => [...messages, data.newDoc]);
+      });
     setMessageText("");
+    refView.current.scrollToEnd({
+      animated: true,
+      y: 0,
+    });
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
       <View style={styles.banner}>
         <MaterialIcons
           name="keyboard-backspace"
@@ -132,9 +138,28 @@ const ChatScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      <View style={styles.inset}>
-        <ScrollView style={styles.scroller}>{messagesComponents}</ScrollView>
+      <ScrollView ref={refView} contentContainerStyle={styles.inset}>
+      <View
+        style={[
+          styles.messageWrapper,
+              styles.messageSent,
+                 styles.messageTextAdmin]}
+      >
+        <View
+          style={[
+            styles.message,
+               styles.messageRecievedBg,
+                 styles.messageTextAdmin ]} //background
+        >
+          <Text style={styles.messageText}>Bonjour {user.name} bienvenue sur Adog, nous éspérons que vous réussirez à trouver votre bohneur dans le respect de chacun. </Text>
+        </View>
+        </View>
+        {messagesComponents}
+      </ScrollView>
 
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View style={styles.inputContainer}>
           <TextInput
             onChangeText={(value) => setMessageText(value)}
@@ -149,8 +174,8 @@ const ChatScreen = ({ navigation }) => {
             <MaterialIcons name="send" color="#ffffff" size={24} />
           </TouchableOpacity>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
@@ -162,28 +187,28 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   inset: {
-    flex: 1,
+    minHeight: "100%",
+    padding: 5,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     backgroundColor: "#ffffff",
     width: "100%",
     paddingTop: 20,
-    position: "relative",
+    paddingBottom: 70,
     borderTopColor: "#ffe099",
     borderLeftColor: "#ffe099",
     borderRightColor: "#ffe099",
     borderTopWidth: 4,
     borderRightWidth: 0.1,
     borderLeftWidth: 0.1,
+    paddingTop:20,
   },
   banner: {
     width: "100%",
-    height: "15%",
-    paddingTop: 20,
     paddingLeft: 20,
+    paddingBottom: 20,
     flexDirection: "row",
     justifyContent: "flex-start",
-    alignItems: "center",
   },
   greetingText: {
     color: "#fff",
@@ -243,9 +268,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     justifySelf: "flex-end",
     alignContent: "flex-start",
-    marginBottom: 30,
-    marginTop: "auto",
-    background: "transparent",
+    backgroundColor: "#FFF",
     paddingLeft: 20,
     paddingRight: 20,
   },
@@ -287,6 +310,11 @@ const styles = StyleSheet.create({
   scroller: {
     paddingLeft: 20,
     paddingRight: 20,
+  },
+  messageTextAdmin: {
+    color: "#506568",
+    fontWeight: "400",
+    backgroundColor:"#E48FF"
   },
 });
 

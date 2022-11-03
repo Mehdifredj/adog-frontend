@@ -3,7 +3,7 @@ import { Image, StyleSheet, SafeAreaView, Text, TouchableOpacity } from "react-n
 
 export default function HomeScreen({ navigation }) {
   const handleSubmit = () => {
-    navigation.navigate("TabNavigator");
+    navigation.navigate("SignUp");
   };
   return (
     <SafeAreaView style={styles.container}>

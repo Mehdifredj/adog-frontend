@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { Provider } from "react-redux";
@@ -9,15 +10,14 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import user from "./reducers/user";
 
-import FiltersScreen from "./screens/FiltersScreen";
 import SwipesScreen from "./screens/SwipesScreen";
 import HomeScreen from "./screens/HomeScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
-import ChatScreen from "./screens/ChatScreen";
 import MatchScreen from "./screens/MatchScreen";
 import UserProfileScreen from "./screens/UserProfileScreen";
 import MessagerieScreen from "./screens/MessagerieScreen";
+import ChatScreen from "./screens/ChatScreen"
 
 const store = configureStore({
   reducer: { user },
@@ -35,12 +35,10 @@ const TabNavigator = () => {
 
           if (route.name === "Swipes") {
             iconName = "heart";
-          } else if (route.name === "Chat") {
-            iconName = "comments";
-          } else if (route.name === "Profile") {
+          } else if (route.name === "My Profile") {
             iconName = "paw";
-          } else if (route.name === "Filters") {
-            iconName = "sliders";
+          } else if (route.name === "Mailbox") {
+            iconName = "comments";
           }
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
@@ -49,14 +47,9 @@ const TabNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="SignUp" component={SignUpScreen} />
-      <Tab.Screen name="SignIn" component={SignInScreen} />
-      <Tab.Screen name="Filters" component={FiltersScreen} />
+      <Tab.Screen name="My Profile" component={UserProfileScreen} />
       <Tab.Screen name="Swipes" component={SwipesScreen} />
-      <Tab.Screen name="Profile" component={UserProfileScreen} />
-      <Tab.Screen name="Match" component={MatchScreen} />
-      <Tab.Screen name="Chat" component={ChatScreen} />
-      <Tab.Screen name="Messagerie" component={MessagerieScreen} />
+      <Tab.Screen name="Mailbox" component={MessagerieScreen} />
     </Tab.Navigator>
   );
 };
@@ -67,6 +60,12 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Match" component={MatchScreen} />
+          <Stack.Screen name="Chat" component={ChatScreen} />
+          <Stack.Screen name="Profile" component={UserProfileScreen} />
+          <Stack.Screen name="SignIn" component={SignInScreen} />
+          <Stack.Screen name="SignUp" component={SignUpScreen} />
+          <Stack.Screen name="Swipes" component={SwipesScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="Messagerie" component={MessagerieScreen} />
         </Stack.Navigator>

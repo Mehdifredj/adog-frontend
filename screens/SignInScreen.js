@@ -34,12 +34,13 @@ export default function SignInScreen({ navigation }) {
           console.log(messagealert);
         }
         if (data.result) {
+          console.log("dattttta", data);
           dispatch(
             login({ email: data.email, token: data.token, name: data.name })
           ); // dispatch pour stocker les données dans le reducer
           setEmail("");
           setPassword("");
-          navigation.navigate("Profile"); // permet la redirection vers la page userProfile.
+          navigation.navigate("TabNavigator", { screen: 'Swipes' }) // permet la redirection vers la page userProfile.
         }
       });
   };
@@ -74,8 +75,6 @@ export default function SignInScreen({ navigation }) {
           source={require("../images/GO.jpg")}
         />
       </TouchableOpacity>
-
-
     </KeyboardAvoidingView>
   );
 }

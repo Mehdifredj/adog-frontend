@@ -35,9 +35,10 @@ export default function SwipesScreen({ navigation }) {
           const age = data.age;
           const gender = data.gender;
           const images = data.images[0];
+          const breed = data.breed;
           const token = data.token;
           const idUser = data._id;
-          return { name, age, gender, images, token, idUser };
+          return { name, breed, age, gender, images, token, idUser };
         });
         setCardsData(cardsData);
         //console.log('test',cardsData); // on recupère toutes les data des users de notre base de données
@@ -68,19 +69,19 @@ export default function SwipesScreen({ navigation }) {
 
   //code conscerant la geolocalisation:
   // Demande d'accord du User de le geolocalier
-  const [currentPosition, setCurrentPosition] = useState(null);
+  // const [currentPosition, setCurrentPosition] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
+  // // useEffect(() => {
+  // //   (async () => {
+  // //     const { status } = await Location.requestForegroundPermissionsAsync();
 
-      if (status === "granted") {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          setCurrentPosition(location.coords);
-        });
-      }
-    })();
-  }, []);
+  // //     if (status === "granted") {
+  // //       Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
+  // //         setCurrentPosition(location.coords);
+  // //       });
+  // //     }
+  // //   })();
+  // // }, []);
 
   //------------------------------
   //swipes
@@ -97,12 +98,14 @@ export default function SwipesScreen({ navigation }) {
       <View key={i}>
         <View>
           <Image source={{ uri: data.images }} style={styles.image} />
-
-          <Text style={styles.text1}>
-            {data.name}, {data.breed}, {data.age}, {data.gender}
+          <View style={styles.containertext}> 
+          <Text style={styles.nametext}>{data.name} </Text>
+          <Text style={styles.breedtext}>{data.breed} </Text>
+          <Text style={styles.genderagetext}>
+            {data.age} ans {data.gender}
           </Text>
-          <Text style={styles.text2}>{data.distance}</Text>
           {cards}
+          </View>  
         </View>
       </View>
     );
@@ -173,7 +176,7 @@ export default function SwipesScreen({ navigation }) {
             //console.log("onSwipedAll");
           }}
           cardIndex={0}
-          backgroundColor={"#F1890F"}
+          backgroundColor={"white"}
           stackSize={3}
         ></Swiper>
       </SafeAreaView>
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
   logo: {
     height: "10%",
     width: "18%",
-    marginTop: "5%",
+    marginBottom: "8%",
     marginLeft: "42%",
   },
   containerCard: {
@@ -201,22 +204,28 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
+  containertext: {
+    marginLeft: "2%",
+  },
   card: {
     flex: 0.7,
     borderRadius: 20,
     justifyContent: "center",
     backgroundColor: "white",
   },
-  text1: {
+  nametext: {
     color: "black",
-    fontSize: "20%",
-    marginTop: "8%",
-    marginLeft: "5%",
+    fontSize: "30%",
+    marginTop: "5%",
   },
-  text2: {
+  breedtext: {
     color: "grey",
-    fontSize: "18%",
-    marginTop: "2%",
-    marginLeft: "5%",
+    fontSize: "20%",
+    marginBottom: "3%",
+  },
+  genderagetext: {
+    color: "grey",
+    fontSize: "17%",
+    marginBottom: "25%",
   },
 });

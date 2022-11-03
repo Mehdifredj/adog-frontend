@@ -2,40 +2,31 @@ import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import Room from "../components/Room";
 import IP_VARIABLE from "../variable";
-import { addRoom } from "../reducers/user";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-export default function MessagerieScreen({ navigation }) {
+export default function MessagerieScreen() {
+
   const [conversations, setConversations] = useState([]);
-
   const user = useSelector((state) => state.user.value);
 
-  console.log(user)
-
-  //console.log('state', user);
-
-  // useEffect - qui récupère les datas
+  console.log('user',user)
 
   useEffect(() => {
-    fetch(
-      `http://${IP_VARIABLE}/messages/mesconversations/${user.token}`
-    )
+    fetch(`http://${IP_VARIABLE}/messages/mesconversations/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
-        // console.log('fetch', data.images[0]);
-        //   console.log("Log data côté FRONT", data.rooms);
         setConversations(data.rooms);
+       
       });
   }, []);
-
-  // console.log("conversation", conversations);
 
   const listeDesRooms = conversations.map((data, i) => {
     let otherUserName;
     let idRoom = data._id;
 
-    if (user.firstname === data.userOne.name) {
+
+    if (user.name === data.userOne.name) {
       otherUserName = data.userTwo.name;
     } else {
       otherUserName = data.userOne.name;
@@ -44,71 +35,50 @@ export default function MessagerieScreen({ navigation }) {
     return <Room key={i} name={otherUserName} idRoom={idRoom} />;
   });
 
-  let test = true;
+  let listeDeConversations;
 
-  let listeDeConversations = (
-    <View style={styles.messagerieVide}>
-      <Text>Désolé pas de conversations</Text>
-    </View>
-  );
-
-  if (test) {
+  if (conversations.length !== 0) {
     listeDeConversations = (
       <ScrollView contentContainerStyle={styles.messagerie}>
         {listeDesRooms}
       </ScrollView>
     );
+  } else {
+    listeDeConversations = (
+      <View style={styles.messagerieVide}>
+        <Text>Désolé vous n'avez pas encore de conversations</Text>
+      </View>
+    );
   }
 
   return (
+ 
     <View style={styles.container}>
-      <View style={styles.blocklogo}>
-        <Image style={styles.logo} source={require("../images/logo.jpg")} />
-      </View>
-      <View>
-        <Text style={styles.title}>
-          Hello {user.firstname} - voici la liste des conversations avec les
-          utilisateurs auxquels vous pouvez accéder :
-        </Text>
-      </View>
-      <View style={{ width: "100%" }}></View>
-
+      <Image style={styles.imageLogo} source={require("../images/logo.jpg")} />
+      <Text style={styles.title}>Hello {user.name} !</Text>
       {listeDeConversations}
     </View>
+ 
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: "orange",
-  },
-  blocklogo: {
-    height: "10%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-end",
     alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
   },
-
-  matchtitle: {
-    marginTop: "3%",
-    color: "orange",
-    alignSelf: "center",
-  },
-  containerMatch: {
-    height: "100%",
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-arround",
+  imageLogo: {
+    marginTop: "15%",
+    width: "30%",
+    height: "15%",
   },
   title: {
-    color: "orange",
-    alignSelf: "center",
-    fontWeight: "bold",
+    color: "#F1890F",
+    fontSize: "20%",
+    fontWeight: "600",
+    marginTop: "3%",
   },
   messagerie: {
     display: "flex",
@@ -118,13 +88,8 @@ const styles = StyleSheet.create({
   },
   messagerieVide: {
     display: "flex",
-    alignContent: "center",
     alignItems: "center",
+    justifyContent: "center",
     height: "75%",
-  },
-  logo: {
-    height: "45%",
-    width: "20%",
-    marginBottom: "3%",
   },
 });

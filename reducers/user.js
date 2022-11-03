@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: { email:null, name:null, breed:null, age:null, gender: null, vaccins: false,
-  aboutMe: null, aboutMyOwner: null, images: [], token: null },
+  aboutMe: null, aboutMyOwner: null, images: [], token: null, room:null },
 };
 
 export const userSlice = createSlice({
@@ -38,9 +38,22 @@ export const userSlice = createSlice({
     },
     deleteRoom: (state) => {
       state.value.room = null
-    }
+    },
+    logout: (state) => {
+      state.value.email = null;
+      state.value.name = null;
+      state.value.breed = null;
+      state.value.age = null;
+      state.value.gender = null;
+      state.value.vaccins = null;
+      state.value.aboutMe = null;
+      state.value.aboutMyOwner = null;
+      state.value.images = [];
+      state.value.token = null;
+      state.value.room = null;
+    },
 }
 })
 
-export const { login, updateProfil, addPhoto, addRoom, addOtherUserName, deleteRoom } = userSlice.actions;
+export const { login, updateProfil, addPhoto, addRoom, addOtherUserName, deleteRoom,logout } = userSlice.actions;
 export default userSlice.reducer;

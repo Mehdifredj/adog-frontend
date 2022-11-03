@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "@pusher/pusher-websocket-react-native": "^1.1.0",
-    "@react-native-community/netinfo": "^9.3.6",
+    "@react-native-community/netinfo": "9.3.0",
     "@react-navigation/bottom-tabs": "6",
     "@react-navigation/native": "6",
     "@react-navigation/native-stack": "6",
     "@reduxjs/toolkit": "^1.8.6",
+    "cloudinary": "^1.32.0",
     "expo": "^46.0.16",
     "expo-camera": "^12.3.0",
     "expo-font": "~10.2.0",
@@ -36,6 +37,7 @@
     "react-native-svg": "12.3.0",
     "react-redux": "^8.0.4",
     "redux-persist": "^6.0.0",
+    "socket.io-client": "^4.5.3",
     "uniqid": "^5.4.0"
   },
   "devDependencies": {
