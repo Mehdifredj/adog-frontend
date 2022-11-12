@@ -10,18 +10,18 @@ export default function MessagerieScreen() {
   const [conversations, setConversations] = useState([]);
   const user = useSelector((state) => state.user.value);
 
-  console.log('user',user)
 
   useEffect(() => {
     fetch(`http://${IP_VARIABLE}/messages/mesconversations/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log('TESTTABLEAU', data)
         setConversations(data.rooms);
-       
       });
   }, []);
 
   const listeDesRooms = conversations.map((data, i) => {
+   
     let otherUserName;
     let idRoom = data._id;
 

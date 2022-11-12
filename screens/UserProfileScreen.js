@@ -40,18 +40,6 @@ export default function UserProfileScreen({ navigation }) {
     user.imageCloud ? user.imageCloud : []
   );
 
-  // permet de récupérer la liste des races de chiens via une api publique
-  // useEffect(() => {
-  //   fetch("https://api.thedogapi.com/v1/breeds/")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       const resultMap = data.map((dataResult, i) => {
-  //         return dataResult.name;
-  //       });
-  //       setData(resultMap);
-  //     });
-  // });
-
   // permet de charger au lancement de la page les informations du profil garder en BDD
   useEffect(() => {
     fetch(`http://${IP_VARIABLE}/users/getuser/${user.token}`)
@@ -66,7 +54,6 @@ export default function UserProfileScreen({ navigation }) {
         setVaccins(data.vaccins);
         setAboutMe(data.aboutMe);
         setAboutMyOwner(data.aboutMyOwner);
-        // data.images.map((value) => dispatch(updateProfil({ images: value })));
       });
   }, []);
 

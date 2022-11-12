@@ -18,8 +18,7 @@ import IP_VARIABLE from "../variable";
 import { deleteRoom } from "../reducers/user";
 
 const ChatScreen = ({ navigation }) => {
-  /* Information écrite pour le moment en dure, mais par la suite elle seront stocké dans le store
-     lorsque l'on cliquera sur la conversation depuis la page précédente */
+ 
   const refView = useRef(null);
   const dispatch = useDispatch();
 
@@ -27,7 +26,7 @@ const ChatScreen = ({ navigation }) => {
   const [messageText, setMessageText] = useState("");
 
   const user = useSelector((state) => state.user.value);
-  console.log("USERRRRRRR =>", user);
+
   const idRoom = user.room; //id room
   const token = user.token; //token
 
@@ -50,7 +49,7 @@ const ChatScreen = ({ navigation }) => {
             {
               ...(message?.name.name === user.name
                 ? styles.messageSentBg
-                : styles.messageRecievedBg), //background
+                : styles.messageRecievedBg), 
             },
           ]}
         >
@@ -92,7 +91,7 @@ const ChatScreen = ({ navigation }) => {
   };
 
   const handleSendMessage = () => {
-    console.log("scfooool", refView.current);
+ 
     setMessages([
       ...messages,
       { name: { name: user.name }, content: messageText },

@@ -1,3 +1,4 @@
+// Création d'un composant Room afin de pouvoir l'injecter sur le ChatScreen.
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -8,12 +9,11 @@ export default function Room(props) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  console.log("props", props);
 
   const handleGoRoom = () => {
-    dispatch(addRoom(props.idRoom)); // dispatch pour stocker les données dans le reducer
-    dispatch(addOtherUserName(props.name));
-    navigation.navigate("Chat");
+    dispatch(addRoom(props.idRoom)); // dispatch pour stocker l'Id de la room dans le reducer afin de pouvoir s'en servir dans le chat
+    dispatch(addOtherUserName(props.name)); // dispatch le nom de l'utilisateur avec qui nous avons match afin de s'en servir dans le chat
+    navigation.navigate("Chat"); // Nous renvoie dans la ChatScreen
   };
 
   return (
@@ -29,10 +29,7 @@ export default function Room(props) {
         />
 
         <View style={styles.textCard}>
-          <Text style={styles.name}>{props.name}</Text>
-          <Text style={styles.content}>
-            Trop mignon ton chien ! On pourrait prévoir une rencontre ? 🐶
-          </Text>
+          <Text style={styles.name}>Conversation avec : {props.name}</Text>
         </View>
       </TouchableOpacity>
     </>

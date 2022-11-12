@@ -23,7 +23,7 @@ export default function SwipesScreen({ navigation }) {
   const [cardsData, setCardsData] = useState([]);
   // Permet d'afficher les cards contenant toutes les informations des users au swipe.
   useEffect(() => {
-    fetch(`http://${IP_VARIABLE}/users/allUsers/${user.token}`)
+    fetch(`http://${IP_VARIABLE}/users/allusers/${user.token}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log("data récupérées du get", data);
@@ -41,28 +41,27 @@ export default function SwipesScreen({ navigation }) {
           return { name, breed, age, gender, images, token, idUser };
         });
         setCardsData(cardsData);
-        //console.log('test',cardsData); // on recupère toutes les data des users de notre base de données
+        // on recupère toutes les data des users de notre base de données
       });
   }, []);
 
-  const handleRight = (event) => {
-    //console.log("testdeEVENT", event); // event permet de rentrer en contact avec l'object sur lequel on intervenir
-    fetch(`http://${IP_VARIABLE}/users/updateLike/${user.token}`, {
+  const handleRight = (event) => {      // event permet de rentrer en contact avec l'object sur lequel on intervenir
+   
+    fetch(`http://${IP_VARIABLE}/users/updatelike/${user.token}`, {
+      
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id: cardsData[event].idUser,
+        id: cardsData[event].idUser,  // permet de récupérer l'id du user de la carte liké
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("testFRONT", data);
-        if (data.result) {
+        if (data.result) { // condition generé par la route updatelike 
           navigation.navigate("Match");
         }
       });
     onSwiped("right");
-    //console.log(cardsData[event]);
   };
 
   //--------------------------------------------------------------------------------------------
@@ -71,17 +70,17 @@ export default function SwipesScreen({ navigation }) {
   // Demande d'accord du User de le geolocalier
   // const [currentPosition, setCurrentPosition] = useState(null);
 
-  // // useEffect(() => {
-  // //   (async () => {
-  // //     const { status } = await Location.requestForegroundPermissionsAsync();
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await Location.requestForegroundPermissionsAsync();
 
-  // //     if (status === "granted") {
-  // //       Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-  // //         setCurrentPosition(location.coords);
-  // //       });
-  // //     }
-  // //   })();
-  // // }, []);
+  //     if (status === "granted") {
+  //       Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
+  //         setCurrentPosition(location.coords);
+  //       });
+  //     }
+  //   })();
+  // }, []);
 
   //------------------------------
   //swipes
@@ -98,14 +97,14 @@ export default function SwipesScreen({ navigation }) {
       <View key={i}>
         <View>
           <Image source={{ uri: data.images }} style={styles.image} />
-          <View style={styles.containertext}> 
-          <Text style={styles.nametext}>{data.name} </Text>
-          <Text style={styles.breedtext}>{data.breed} </Text>
-          <Text style={styles.genderagetext}>
-            {data.age} ans {data.gender}
-          </Text>
-          {cards}
-          </View>  
+          <View style={styles.containertext}>
+            <Text style={styles.nametext}>{data.name} </Text>
+            <Text style={styles.breedtext}>{data.breed} </Text>
+            <Text style={styles.genderagetext}>
+              {data.age} ans {data.gender}
+            </Text>
+            {cards}
+          </View>
         </View>
       </View>
     );
@@ -199,7 +198,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 375,
+    width: 350,
     height: 460,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,

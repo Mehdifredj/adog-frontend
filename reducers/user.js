@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit"; 
 
 const initialState = {
   value: { email:null, name:null, breed:null, age:null, gender: null, vaccins: false,
-  aboutMe: null, aboutMyOwner: null, images: [], token: null, room:null },
+  aboutMe: null, aboutMyOwner: null, images: [], token: null, room:[] }, // on initialise la valeur de nos états
 };
 
 export const userSlice = createSlice({
@@ -13,7 +13,8 @@ export const userSlice = createSlice({
       state.value.name = action.payload.name;
       state.value.email = action.payload.email;
       state.value.token = action.payload.token;
-    },
+    }, // fonction permettant de récupérer la valeur name,email et token pour les réutiliser par la suite
+
     updateProfil: (state, action) => {
       state.value.name = action.payload.name;
       state.value.breed = action.payload.breed;
@@ -23,22 +24,24 @@ export const userSlice = createSlice({
       state.value.aboutMe = action.payload.aboutMe;
       state.value.aboutMyOwner = action.payload.aboutMyOwner;
       state.value.images.push(action.payload.images);
-    },
+    }, // idem pour les autres valeurs
+
     addPhoto: (state, action) => {
       state.value.images.push(action.payload);
-     // console.log(state.value.images);
-    },
+    }, // 
+
     addRoom: (state, action) => {
-      console.log("action",action.payload);
       state.value.room = action.payload;
-    },
+    }, // création de room
+
     addOtherUserName: (state, action) => {
-      console.log("action",action.payload);
       state.value.otherusername = action.payload;
     },
+
     deleteRoom: (state) => {
       state.value.room = null
     },
+
     logout: (state) => {
       state.value.email = null;
       state.value.name = null;
